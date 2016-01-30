@@ -29,8 +29,13 @@ public class CobraServerImpl implements CobraServer {
     @Override
     public void start() {
 
+        if(running)
+            throw new IllegalStateException("server is already running");
+
         try {
             serverSocket = new ServerSocket(cobraConfig.port, 25, InetAddress.getByName(cobraConfig.host));
+
+            running = true;
 
             executorService.execute(new CobraServerThread());
         } catch (IOException e) {
@@ -40,6 +45,11 @@ public class CobraServerImpl implements CobraServer {
 
     @Override
     public void stop() {
+
+        if(!running)
+            throw new IllegalStateException("server is already stopped");
+
+        running = false;
 
         if(serverSocket != null) {
             try {
@@ -61,8 +71,6 @@ public class CobraServerImpl implements CobraServer {
 
         @Override
         public void run() {
-
-            running = true;
 
             // TODO: 30.01.2016
         }
