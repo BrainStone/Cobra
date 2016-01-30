@@ -52,7 +52,7 @@ public class CobraServerImpl implements CobraServer {
             throw new IllegalStateException("server is already running");
 
         try {
-            serverSocket = new ServerSocket(cobraConfig.port, 25, InetAddress.getByName(cobraConfig.host));
+            serverSocket = new ServerSocket(cobraConfig.port, cobraConfig.backLog, InetAddress.getByName(cobraConfig.host));
 
             running = true;
 

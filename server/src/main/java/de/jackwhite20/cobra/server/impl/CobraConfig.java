@@ -33,6 +33,8 @@ public abstract class CobraConfig {
 
     protected int port;
 
+    protected int backLog;
+
     private List<Class<?>> classes = new ArrayList<>();
 
     public void host(String host) {
@@ -43,6 +45,11 @@ public abstract class CobraConfig {
     public void port(int port) {
 
         this.port = port;
+    }
+
+    public void backLog(int backLog) {
+
+        this.backLog = backLog;
     }
 
     public void register(Class<?> clazz) {

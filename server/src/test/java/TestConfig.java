@@ -9,5 +9,6 @@ public class TestConfig extends CobraConfig {
 
         host("localhost");
         port(8080);
+        backLog(25);
     }
 }
