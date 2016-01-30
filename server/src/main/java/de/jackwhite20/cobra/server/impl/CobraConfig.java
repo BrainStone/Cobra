@@ -1,6 +1,6 @@
 package de.jackwhite20.cobra.server.impl;
 
-import de.jackwhite20.cobra.server.annotation.Path;
+import de.jackwhite20.cobra.server.http.annotation.Path;
 
 import java.util.ArrayList;
 import java.util.List;
