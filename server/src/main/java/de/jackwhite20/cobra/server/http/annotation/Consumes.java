@@ -19,17 +19,19 @@
 
 package de.jackwhite20.cobra.server.http.annotation;
 
+import de.jackwhite20.cobra.server.http.ContentType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by JackWhite20 on 30.01.2016.
+ * Created by JackWhite20 on 31.01.2016.
  */
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Path {
+public @interface Consumes {
 
-    String value();
+    ContentType value() default ContentType.ALL;
 }

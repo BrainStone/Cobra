@@ -25,11 +25,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by JackWhite20 on 30.01.2016.
+ * Created by JackWhite20 on 31.01.2016.
  */
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Path {
-
-    String value();
+public @interface GET {
 }
