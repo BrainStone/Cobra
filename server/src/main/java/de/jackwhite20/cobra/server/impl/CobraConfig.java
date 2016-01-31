@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.server.impl;
 
+import de.jackwhite20.cobra.server.filter.RequestFilter;
 import de.jackwhite20.cobra.server.http.annotation.Path;
 
 import java.util.ArrayList;
@@ -35,7 +36,9 @@ public abstract class CobraConfig {
 
     protected int backLog;
 
-    private List<Class<?>> classes = new ArrayList<>();
+    protected List<Class<?>> classes = new ArrayList<>();
+
+    protected List<Class<? extends RequestFilter>> filters = new ArrayList<>();
 
     public void host(String host) {
 
@@ -50,6 +53,11 @@ public abstract class CobraConfig {
     public void backLog(int backLog) {
 
         this.backLog = backLog;
+    }
+
+    public void filter(Class<? extends RequestFilter> filter) {
+
+        this.filters.add(filter);
     }
 
     public void register(Class<?> clazz) {
