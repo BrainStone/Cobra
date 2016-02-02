@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jackwhite20.cobra.server.http;
+package de.jackwhite20.cobra.shared;
 
 /**
  * Created by JackWhite20 on 30.01.2016.
