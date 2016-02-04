@@ -23,7 +23,6 @@ import de.jackwhite20.cobra.shared.RequestMethod;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 /**
@@ -35,7 +34,7 @@ public class Request {
 
     private RequestMethod method;
 
-    private String location;
+    protected String location;
 
     private String version;
 
@@ -52,12 +51,8 @@ public class Request {
     private void parse() {
 
         StringTokenizer tokenizer = new StringTokenizer(raw);
-        try {
-            method = RequestMethod.valueOf(tokenizer.nextToken());
-        } catch (NoSuchElementException e) {
-            System.out.println("RAW:");
-            System.out.println(raw);
-        }
+
+        method = RequestMethod.valueOf(tokenizer.nextToken());
         location = tokenizer.nextToken();
         // Remove last slash
         if(location.endsWith("/")) {
@@ -72,11 +67,6 @@ public class Request {
             if(keyVal.length == 2)
                 headers.put(keyVal[0].trim(), keyVal[1].trim());
         }
-    }
-
-    public String raw() {
-
-        return raw;
     }
 
     public RequestMethod method() {

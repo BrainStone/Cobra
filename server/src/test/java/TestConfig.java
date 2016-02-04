@@ -1,4 +1,5 @@
 import de.jackwhite20.cobra.server.impl.CobraConfig;
+import resources.RootResource;
 import resources.TestResource;
 
 /**
@@ -15,5 +16,6 @@ public class TestConfig extends CobraConfig {
         filter(TestFilter.class);
 
         register(TestResource.class);
+        register(RootResource.class);
     }
 }
