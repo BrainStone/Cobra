@@ -59,6 +59,10 @@ public class HTTPRequest {
             System.out.println(raw);
         }
         location = tokenizer.nextToken();
+        // Remove last slash
+        if(location.endsWith("/")) {
+            location = location.substring(0, location.lastIndexOf("/"));
+        }
         version = tokenizer.nextToken();
 
         String[] lines = raw.split("\\r?\\n");
