@@ -25,7 +25,9 @@ import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by JackWhite20 on 30.01.2016.
@@ -54,8 +56,23 @@ public class ResourceInfo {
             if(!entry.requestMethod.equals(httpRequest.method()))
                 return HTTPResponse.status(Status.METHOD_NOT_ALLOWED).build();
 
+            System.out.println("Keys: " + String.join(", ", entry.postParameters));
+
             try {
-                HTTPResponse response = ((HTTPResponse) entry.method.invoke(object, httpRequest));
+                Object[] objects = { httpRequest };
+
+                // TODO: 04.02.2016  
+                if(httpRequest.method() == RequestMethod.POST) {
+                    objects = new Object[entry.postParameters.size() + 1];
+                    objects[0] = httpRequest;
+                    int i = 1;
+                    for (String parameter : entry.postParameters) {
+                        objects[i] = httpRequest.post(parameter);
+                        i++;
+                    }
+                }
+
+                HTTPResponse response = ((HTTPResponse) entry.method.invoke(object, objects));
                 response.headers().put("Content-Type", entry.contentType);
                 return response;
             } catch (Exception e) {
@@ -91,6 +108,8 @@ public class ResourceInfo {
 
         private RequestMethod requestMethod;
 
+        private List<String> postParameters = new ArrayList<>();
+
         public Entry(Method method, String contentType, String acceptContentType, RequestMethod requestMethod) {
 
             this.method = method;
@@ -102,6 +121,11 @@ public class ResourceInfo {
         public Entry(Method method) {
 
             this(method, "text/html; charset=utf-8", "*/*", RequestMethod.GET);
+        }
+
+        public void addPostKey(String postKey) {
+
+            postParameters.add(postKey);
         }
 
         public Method method() {
@@ -122,6 +146,11 @@ public class ResourceInfo {
         public RequestMethod requestMethod() {
 
             return requestMethod;
+        }
+
+        public List<String> postParameters() {
+
+            return postParameters;
         }
     }
 }
