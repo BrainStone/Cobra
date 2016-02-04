@@ -99,11 +99,11 @@ public class HTTPRequest {
         return headers.get(key);
     }
 
-    public void postData(String data) {
+    protected void postData(String data) {
 
         String[] splitted = data.split("&");
-        for (int i = 0; i < splitted.length; i++) {
-            String[] keyVal = splitted[i].split("=");
+        for (String aSplitted : splitted) {
+            String[] keyVal = aSplitted.split("=");
             if (keyVal.length == 2)
                 postData.put(keyVal[0], keyVal[1]);
         }
