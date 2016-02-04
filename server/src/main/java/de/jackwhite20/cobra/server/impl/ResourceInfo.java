@@ -56,12 +56,10 @@ public class ResourceInfo {
             if(!entry.requestMethod.equals(httpRequest.method()))
                 return HTTPResponse.status(Status.METHOD_NOT_ALLOWED).build();
 
-            System.out.println("Keys: " + String.join(", ", entry.postParameters));
-
             try {
                 Object[] objects = { httpRequest };
 
-                // TODO: 04.02.2016  
+                // TODO: 04.02.2016
                 if(httpRequest.method() == RequestMethod.POST) {
                     objects = new Object[entry.postParameters.size() + 1];
                     objects[0] = httpRequest;

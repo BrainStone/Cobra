@@ -110,7 +110,7 @@ public class HTTPResponse {
 
         private String reason = "";
 
-        private String content = "";
+        private byte[] content;
 
         private HashMap<String, String> headers = new HashMap<>();
 
@@ -120,12 +120,18 @@ public class HTTPResponse {
             this.reason = statusReason;
         }
 
-        public Builder content(String content) {
+        public Builder content(byte[] content) {
 
             this.content = content;
 
             return this;
         }
+
+        public Builder content(String content) {
+
+            return content(content.getBytes());
+        }
+
 
         public Builder header(String key, String value) {
 
@@ -139,7 +145,7 @@ public class HTTPResponse {
             HTTPResponse response = new HTTPResponse();
             response.responseCode = status;
             response.responseReason = reason;
-            response.content = content.getBytes();
+            response.content = content;
             response.headers(headers);
 
             return response;
