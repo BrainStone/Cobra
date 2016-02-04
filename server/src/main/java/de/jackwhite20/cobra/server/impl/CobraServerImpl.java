@@ -92,15 +92,19 @@ public class CobraServerImpl implements CobraServer {
                     if(method.isAnnotationPresent(POST.class))
                         requestMethod = RequestMethod.POST;
 
+                    ResourceInfo.Entry resEntry;
+
+                    // TODO: 04.02.2016
+                    resourceInfo.add(method.getAnnotation(Path.class).value(), (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method)));
+
                     if(method.getParameterCount() > 1) {
                         for (Parameter parameter : method.getParameters()) {
                             if(parameter.isAnnotationPresent(FormParam.class)) {
-
+                                String postKey = parameter.getAnnotation(FormParam.class).value();
+                                resEntry.addPostKey(postKey);
                             }
                         }
                     }
-
-                    resourceInfo.add(method.getAnnotation(Path.class).value(), (method.isAnnotationPresent(Produces.class)) ? new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : new ResourceInfo.Entry(method));
                 }
             }
         }

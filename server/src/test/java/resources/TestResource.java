@@ -19,13 +19,10 @@
 
 package resources;
 
+import de.jackwhite20.cobra.server.http.annotation.*;
 import de.jackwhite20.cobra.shared.ContentType;
 import de.jackwhite20.cobra.server.http.HTTPRequest;
 import de.jackwhite20.cobra.server.http.HTTPResponse;
-import de.jackwhite20.cobra.server.http.annotation.GET;
-import de.jackwhite20.cobra.server.http.annotation.POST;
-import de.jackwhite20.cobra.server.http.annotation.Path;
-import de.jackwhite20.cobra.server.http.annotation.Produces;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,7 +37,7 @@ public class TestResource {
     @POST
     @Path("/info")
     @Produces(ContentType.TEXT_HTML)
-    public HTTPResponse info(HTTPRequest httpRequest, String name, String password) {
+    public HTTPResponse info(HTTPRequest httpRequest, @FormParam("name") String name, @FormParam("password") String password) {
 
         System.out.println("Name: " + httpRequest.post("name"));
         System.out.println("Password: " + httpRequest.post("password"));
