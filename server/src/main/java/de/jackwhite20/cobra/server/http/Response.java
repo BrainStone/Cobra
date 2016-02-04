@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class HTTPResponse {
+public class Response {
 
     private String version = "HTTP/1.1";
     private int responseCode = 200;
@@ -140,9 +140,9 @@ public class HTTPResponse {
             return this;
         }
 
-        public HTTPResponse build() {
+        public Response build() {
 
-            HTTPResponse response = new HTTPResponse();
+            Response response = new Response();
             response.responseCode = status;
             response.responseReason = reason;
             response.content = content;
