@@ -19,8 +19,8 @@
 
 package de.jackwhite20.cobra.server.impl;
 
-import de.jackwhite20.cobra.server.http.HTTPRequest;
-import de.jackwhite20.cobra.server.http.HTTPResponse;
+import de.jackwhite20.cobra.server.http.Request;
+import de.jackwhite20.cobra.server.http.Response;
 import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
 
@@ -46,15 +46,15 @@ public class ResourceInfo {
         this.rootPath = rootPath;
     }
 
-    public HTTPResponse execute(String path, HTTPRequest httpRequest) {
+    public Response execute(String path, Request httpRequest) {
 
         Entry entry = methods.get(path);
         if(entry != null) {
             if(!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type")))
-                return HTTPResponse.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
+                return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
 
             if(!entry.requestMethod.equals(httpRequest.method()))
-                return HTTPResponse.status(Status.METHOD_NOT_ALLOWED).build();
+                return Response.status(Status.METHOD_NOT_ALLOWED).build();
 
             try {
                 Object[] objects = { httpRequest };
@@ -70,7 +70,7 @@ public class ResourceInfo {
                     }
                 }
 
-                HTTPResponse response = ((HTTPResponse) entry.method.invoke(object, objects));
+                Response response = ((Response) entry.method.invoke(object, objects));
                 response.headers().put("Content-Type", entry.contentType);
                 return response;
             } catch (Exception e) {
@@ -78,7 +78,7 @@ public class ResourceInfo {
             }
         }
 
-        return HTTPResponse.status(Status.NOT_FOUND).build();
+        return Response.status(Status.NOT_FOUND).build();
     }
 
     public void add(String path, Entry entry) {
