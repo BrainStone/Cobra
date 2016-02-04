@@ -23,7 +23,11 @@ import de.jackwhite20.cobra.server.http.annotation.*;
 import de.jackwhite20.cobra.shared.ContentType;
 import de.jackwhite20.cobra.server.http.HTTPRequest;
 import de.jackwhite20.cobra.server.http.HTTPResponse;
+import de.jackwhite20.cobra.shared.Status;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -56,5 +60,21 @@ public class TestResource {
         //System.out.println("Password: " + httpRequest.post("password"));
 
         return HTTPResponse.ok().content("<H1>test</H1>").build();
+    }
+
+    @GET
+    @Path("/download")
+    @Produces(ContentType.APPLICATION_OCTET_STREAM)
+    public HTTPResponse download(HTTPRequest httpRequest) {
+
+        try {
+            byte[] file = Files.readAllBytes(Paths.get("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt"));
+
+            return HTTPResponse.ok().header("Content-Disposition", "attachment; filename=\"test.txt\"").content(file).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return HTTPResponse.status(Status.EXPECTATION_FAILED).build();
     }
 }
