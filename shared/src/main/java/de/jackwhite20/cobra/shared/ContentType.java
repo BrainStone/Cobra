@@ -27,6 +27,7 @@ public enum ContentType {
     TEXT_HTML("text/html"),
     APPLICATION_JSON("application/json"),
     APPLICATION_XML("application/xml"),
+    APPLICATION_OCTET_STREAM("application/octet-stream"),
     ALL("*/*");
 
     private String type;
