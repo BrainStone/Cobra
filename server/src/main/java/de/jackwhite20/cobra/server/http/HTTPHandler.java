@@ -23,10 +23,7 @@ import de.jackwhite20.cobra.server.filter.FilteredRequest;
 import de.jackwhite20.cobra.server.impl.CobraServerImpl;
 import de.jackwhite20.cobra.shared.RequestMethod;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
@@ -35,13 +32,15 @@ import java.util.Map;
  */
 public class HTTPHandler implements Runnable {
 
+    private static final byte[] NEW_LINE = "\n\r".getBytes();
+
     private Socket socket;
 
     private CobraServerImpl cobraServer;
 
     private BufferedReader bufferedReader;
 
-    private PrintWriter printWriter;
+    private OutputStream outputStream;
 
     public HTTPHandler(Socket socket, CobraServerImpl cobraServer) {
 
@@ -49,7 +48,7 @@ public class HTTPHandler implements Runnable {
         this.cobraServer = cobraServer;
         try {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.printWriter = new PrintWriter(socket.getOutputStream());
+            this.outputStream = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,14 +82,16 @@ public class HTTPHandler implements Runnable {
 
                 Response response = (filteredRequest.response() == null) ? cobraServer.handleRequest(httpRequest) : filteredRequest.response();
                 response.addDefaultHeaders();
-                printWriter.println(response.version() + " " + response.responseCode() + " " + response.responseReason());
+                outputStream.write((response.version() + " " + response.responseCode() + " " + response.responseReason()).getBytes());
+                outputStream.write(NEW_LINE);
                 for (Map.Entry<String, String> header : response.headers().entrySet()) {
-                    printWriter.println(header.getKey() + ": " + header.getValue());
+                    outputStream.write((header.getKey() + ": " + header.getValue()).getBytes());
+                    outputStream.write(NEW_LINE);
                 }
-                printWriter.println("");
+                outputStream.write(NEW_LINE);
                 if (response.content() != null)
-                    printWriter.println(new String(response.content()));
-                printWriter.flush();
+                    outputStream.write(response.content());
+                outputStream.flush();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +106,10 @@ public class HTTPHandler implements Runnable {
             } catch (IOException ignored) {
             }
 
-            printWriter.close();
+            try {
+                outputStream.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 }
