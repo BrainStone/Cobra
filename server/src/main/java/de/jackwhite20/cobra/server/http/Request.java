@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /**
  * Created by JackWhite20 on 30.01.2016.
  */
-public class HTTPRequest {
+public class Request {
 
     private final String raw;
 
@@ -43,7 +43,7 @@ public class HTTPRequest {
 
     private Map<String, String> postData = new HashMap<>();
 
-    public HTTPRequest(String raw) {
+    public Request(String raw) {
 
         this.raw = raw;
         parse();
