@@ -56,7 +56,7 @@ public class CobraClient {
     public String get(String path, RequestMethod requestMethod, ContentType contentType) {
 
         try {
-            URL url = new URL(host + port + rootPath + path);
+            URL url = new URL("http://" + host + ":" + port + rootPath + path);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(requestMethod.name());
             conn.setRequestProperty("Accept", contentType.type());
