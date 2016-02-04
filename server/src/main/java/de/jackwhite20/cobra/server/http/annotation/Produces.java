@@ -19,7 +19,7 @@
 
 package de.jackwhite20.cobra.server.http.annotation;
 
-import de.jackwhite20.cobra.server.http.ContentType;
+import de.jackwhite20.cobra.shared.ContentType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
