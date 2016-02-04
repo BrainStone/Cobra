@@ -21,8 +21,8 @@ package resources;
 
 import de.jackwhite20.cobra.server.http.annotation.*;
 import de.jackwhite20.cobra.shared.ContentType;
-import de.jackwhite20.cobra.server.http.HTTPRequest;
-import de.jackwhite20.cobra.server.http.HTTPResponse;
+import de.jackwhite20.cobra.server.http.Request;
+import de.jackwhite20.cobra.server.http.Response;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class TestResource {
     @POST
     @Path("/info")
     @Produces(ContentType.TEXT_HTML)
-    public HTTPResponse info(HTTPRequest httpRequest, @FormParam("name") String name, @FormParam("password") String password) {
+    public Response info(Request httpRequest, @FormParam("name") String name, @FormParam("password") String password) {
 
         System.out.println("Name: " + httpRequest.post("name"));
         System.out.println("Password: " + httpRequest.post("password"));
@@ -49,32 +49,32 @@ public class TestResource {
         System.out.println("Name2: " + name);
         System.out.println("Password2: " + password);
 
-        return HTTPResponse.ok().content("<H1>info " + atomicInteger.getAndIncrement() + "</H1>").header("X-Test", "Hallo :D").build();
+        return Response.ok().content("<H1>info " + atomicInteger.getAndIncrement() + "</H1>").header("X-Test", "Hallo :D").build();
     }
 
     @GET
     @Path("/test")
-    public HTTPResponse test(HTTPRequest httpRequest) {
+    public Response test(Request httpRequest) {
 
         //System.out.println("Name: " + httpRequest.post("name"));
         //System.out.println("Password: " + httpRequest.post("password"));
 
-        return HTTPResponse.ok().content("<H1>test</H1>").build();
+        return Response.ok().content("<H1>test</H1>").build();
     }
 
     @GET
     @Path("/download")
     @Produces(ContentType.APPLICATION_OCTET_STREAM)
-    public HTTPResponse download(HTTPRequest httpRequest) {
+    public Response download(Request httpRequest) {
 
         try {
             byte[] file = Files.readAllBytes(Paths.get("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt"));
 
-            return HTTPResponse.ok().header("Content-Disposition", "attachment; filename=\"test.txt\"").content(file).build();
+            return Response.ok().header("Content-Disposition", "attachment; filename=\"test.txt\"").content(file).build();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return HTTPResponse.status(Status.EXPECTATION_FAILED).build();
+        return Response.status(Status.EXPECTATION_FAILED).build();
     }
 }

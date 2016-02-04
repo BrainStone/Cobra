@@ -19,8 +19,8 @@
 
 package de.jackwhite20.cobra.server.filter;
 
-import de.jackwhite20.cobra.server.http.HTTPRequest;
-import de.jackwhite20.cobra.server.http.HTTPResponse;
+import de.jackwhite20.cobra.server.http.Request;
+import de.jackwhite20.cobra.server.http.Response;
 import de.jackwhite20.cobra.shared.RequestMethod;
 
 /**
@@ -28,16 +28,16 @@ import de.jackwhite20.cobra.shared.RequestMethod;
  */
 public class FilteredRequest {
 
-    private HTTPRequest request;
+    private Request request;
 
-    private HTTPResponse response;
+    private Response response;
 
-    public FilteredRequest(HTTPRequest request) {
+    public FilteredRequest(Request request) {
 
         this.request = request;
     }
 
-    public void abortWith(HTTPResponse response) {
+    public void abortWith(Response response) {
 
         this.response = response;
     }
@@ -57,7 +57,7 @@ public class FilteredRequest {
         return request.header(key);
     }
 
-    public HTTPResponse response() {
+    public Response response() {
 
         return response;
     }

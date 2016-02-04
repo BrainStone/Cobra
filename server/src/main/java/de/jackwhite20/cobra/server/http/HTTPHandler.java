@@ -76,6 +76,9 @@ public class HTTPHandler implements Runnable {
                     }
                 }
 
+                if(httpRequest.location().isEmpty())
+                    httpRequest.location = "*";
+
                 // TODO: 04.02.2016
                 FilteredRequest filteredRequest = new FilteredRequest(httpRequest);
                 cobraServer.filter(filteredRequest);

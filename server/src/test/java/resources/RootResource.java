@@ -17,20 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import de.jackwhite20.cobra.server.filter.FilteredRequest;
-import de.jackwhite20.cobra.server.filter.RequestFilter;
+package resources;
+
+import de.jackwhite20.cobra.server.http.Request;
 import de.jackwhite20.cobra.server.http.Response;
-import de.jackwhite20.cobra.shared.Status;
+import de.jackwhite20.cobra.server.http.annotation.GET;
+import de.jackwhite20.cobra.server.http.annotation.Path;
 
 /**
- * Created by JackWhite20 on 31.01.2016.
+ * Created by JackWhite20 on 04.02.2016.
  */
-public class TestFilter implements RequestFilter {
+@Path("*")
+public class RootResource {
 
-    @Override
-    public void filter(FilteredRequest request) {
+    @GET
+    @Path("")
+    public Response root(Request httpRequest) {
 
-        if(request.header("X-Test") != null)
-            request.abortWith(Response.status(Status.FORBIDDEN).build());
+        return Response.ok().content("Root path!").build();
     }
 }
