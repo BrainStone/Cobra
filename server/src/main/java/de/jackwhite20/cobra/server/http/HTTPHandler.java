@@ -66,39 +66,46 @@ public class HTTPHandler implements Runnable {
                 lines.append(line).append("\n\r");
             }
 
-            HTTPRequest httpRequest = new HTTPRequest(lines.toString());
-            if(httpRequest.method() == RequestMethod.POST) {
-                int length = Integer.parseInt(httpRequest.header("Content-Length"));
-                if (length > 0) {
-                    char[] charArray = new char[length];
-                    bufferedReader.read(charArray, 0, length);
-                    httpRequest.postData(new String(charArray));
+            if(!lines.toString().isEmpty()) {
+                Request httpRequest = new Request(lines.toString());
+                if (httpRequest.method() == RequestMethod.POST) {
+                    int length = Integer.parseInt(httpRequest.header("Content-Length"));
+                    if (length > 0) {
+                        char[] charArray = new char[length];
+                        bufferedReader.read(charArray, 0, length);
+                        httpRequest.postData(new String(charArray));
+                    }
                 }
-            }
 
-            FilteredRequest filteredRequest = new FilteredRequest(httpRequest);
-            cobraServer.filter(filteredRequest);
+                // TODO: 04.02.2016
+                FilteredRequest filteredRequest = new FilteredRequest(httpRequest);
+                cobraServer.filter(filteredRequest);
 
-            HTTPResponse response = (filteredRequest.response() == null) ? cobraServer.handleRequest(httpRequest) : filteredRequest.response();
-            response.addDefaultHeaders();
-            printWriter.println(response.version() + " " + response.responseCode() + " " + response.responseReason());
-            for (Map.Entry<String, String> header : response.headers().entrySet()) {
-                printWriter.println(header.getKey() + ": " + header.getValue());
+                Response response = (filteredRequest.response() == null) ? cobraServer.handleRequest(httpRequest) : filteredRequest.response();
+                response.addDefaultHeaders();
+                printWriter.println(response.version() + " " + response.responseCode() + " " + response.responseReason());
+                for (Map.Entry<String, String> header : response.headers().entrySet()) {
+                    printWriter.println(header.getKey() + ": " + header.getValue());
+                }
+                printWriter.println("");
+                if (response.content() != null)
+                    printWriter.println(new String(response.content()));
+                printWriter.flush();
             }
-            printWriter.println("");
-            if(response.content() != null)
-                printWriter.println(new String(response.content()));
-            printWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
                 socket.close();
-                bufferedReader.close();
-                printWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             }
+
+            try {
+                bufferedReader.close();
+            } catch (IOException ignored) {
+            }
+
+            printWriter.close();
         }
     }
 }
