@@ -87,7 +87,7 @@ public class CobraServerImpl implements CobraServer {
 
         for (Method method : clazz.getMethods()) {
             if(method.isAnnotationPresent(Path.class)/* && method.getParameterCount() == 1*/) {
-                if (method.getParameterTypes()[0].isAssignableFrom(HTTPRequest.class)) {
+                if (method.getParameterTypes()[0].isAssignableFrom(Request.class)) {
                     RequestMethod requestMethod = RequestMethod.GET;
                     if(method.isAnnotationPresent(POST.class))
                         requestMethod = RequestMethod.POST;
@@ -95,6 +95,7 @@ public class CobraServerImpl implements CobraServer {
                     ResourceInfo.Entry resEntry;
 
                     // TODO: 04.02.2016
+                    // TODO: Maybe allow Produces annotation only on POST requests
                     resourceInfo.add(method.getAnnotation(Path.class).value(), (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method)));
 
                     if(method.getParameterCount() > 1) {
@@ -155,7 +156,7 @@ public class CobraServerImpl implements CobraServer {
         }
     }
 
-    public HTTPResponse handleRequest(HTTPRequest request) {
+    public Response handleRequest(Request request) {
 
         for (Map.Entry<String, ResourceInfo> entry : resourceInfo.entrySet()) {
             if(request.location().startsWith(entry.getKey())) {
@@ -164,7 +165,7 @@ public class CobraServerImpl implements CobraServer {
             }
         }
 
-        return HTTPResponse.status(Status.NOT_FOUND).build();
+        return Response.status(Status.NOT_FOUND).build();
     }
 
     public boolean isRunning() {
