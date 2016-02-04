@@ -40,10 +40,13 @@ public class TestResource {
     @POST
     @Path("/info")
     @Produces(ContentType.TEXT_HTML)
-    public HTTPResponse info(HTTPRequest httpRequest) {
+    public HTTPResponse info(HTTPRequest httpRequest, String name, String password) {
 
         System.out.println("Name: " + httpRequest.post("name"));
         System.out.println("Password: " + httpRequest.post("password"));
+
+        System.out.println("Name2: " + name);
+        System.out.println("Password2: " + password);
 
         return HTTPResponse.ok().content("<H1>info " + atomicInteger.getAndIncrement() + "</H1>").header("X-Test", "Hallo :D").build();
     }
