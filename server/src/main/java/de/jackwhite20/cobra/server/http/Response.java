@@ -29,9 +29,13 @@ import java.util.Map;
 public class Response {
 
     private String version = "HTTP/1.1";
+
     private int responseCode = 200;
+
     private String responseReason = "OK";
-    private Map<String, String> headers = new LinkedHashMap<String, String>();
+
+    private Map<String, String> headers = new LinkedHashMap<>();
+
     private byte[] content;
 
     public void addDefaultHeaders() {
