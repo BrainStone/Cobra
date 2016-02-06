@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jackwhite20.cobra.server.http.annotation;
+package de.jackwhite20.cobra.server.http.annotation.method;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,5 +29,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PUT {
+public @interface DELETE {
 }

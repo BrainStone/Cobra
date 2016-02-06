@@ -21,7 +21,7 @@ package resources;
 
 import de.jackwhite20.cobra.server.http.Request;
 import de.jackwhite20.cobra.server.http.Response;
-import de.jackwhite20.cobra.server.http.annotation.GET;
+import de.jackwhite20.cobra.server.http.annotation.method.GET;
 import de.jackwhite20.cobra.server.http.annotation.Path;
 
 /**
