@@ -92,6 +92,10 @@ public class CobraServerImpl implements CobraServer {
                     RequestMethod requestMethod = RequestMethod.GET;
                     if(method.isAnnotationPresent(POST.class))
                         requestMethod = RequestMethod.POST;
+                    else if(method.isAnnotationPresent(DELETE.class))
+                        requestMethod = RequestMethod.DELETE;
+                    else if(method.isAnnotationPresent(PUT.class))
+                        requestMethod = RequestMethod.PUT;
 
                     ResourceInfo.Entry resEntry;
 
