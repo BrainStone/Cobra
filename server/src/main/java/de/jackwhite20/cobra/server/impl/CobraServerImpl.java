@@ -26,6 +26,7 @@ import de.jackwhite20.cobra.server.http.*;
 import de.jackwhite20.cobra.server.http.annotation.*;
 import de.jackwhite20.cobra.shared.ContentType;
 import de.jackwhite20.cobra.shared.RequestMethod;
+import de.jackwhite20.cobra.server.http.Response;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.io.IOException;
