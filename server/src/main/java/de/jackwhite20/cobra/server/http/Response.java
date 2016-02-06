@@ -73,11 +73,6 @@ public class Response {
         return content;
     }
 
-    public void version(String version) {
-
-        this.version = version;
-    }
-
     public void responseCode(int responseCode) {
 
         this.responseCode = responseCode;
