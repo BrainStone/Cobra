@@ -22,6 +22,8 @@ package de.jackwhite20.cobra.server.impl;
 import de.jackwhite20.cobra.server.filter.RequestFilter;
 import de.jackwhite20.cobra.server.http.annotation.Path;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +32,21 @@ import java.util.List;
  */
 public abstract class CobraConfig {
 
+    private static final char PKG_SEPARATOR = '.';
+
+    private static final char DIR_SEPARATOR = '/';
+
+    private static final String CLASS_FILE_SUFFIX = ".class";
+
     protected String host;
 
     protected int port;
 
     protected int backLog;
 
-    protected List<Class<?>> classes = new ArrayList<>();
+    protected final List<Class<?>> classes = new ArrayList<>();
 
-    protected List<Class<? extends RequestFilter>> filters = new ArrayList<>();
+    protected final List<Class<? extends RequestFilter>> filters = new ArrayList<>();
 
     public void host(String host) {
 
@@ -66,5 +74,55 @@ public abstract class CobraConfig {
             throw new IllegalArgumentException("class " + clazz.getName() + " needs a Path annotation");
 
         classes.add(clazz);
+    }
+
+    public void register(String packageName) {
+
+        scanPackage(packageName).forEach(this::register);
+    }
+
+    private List<Class<?>> scanPackage(String packageName) {
+
+        String scannedPath = packageName.replace(PKG_SEPARATOR, DIR_SEPARATOR);
+        URL url = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
+        if (url == null)
+            throw new IllegalArgumentException("package \"" + packageName + "\" does not exist");
+
+        File scannedDir = new File(url.getFile());
+        List<Class<?>> classes = new ArrayList<>();
+
+        File[] files = scannedDir.listFiles();
+        if (files == null)
+            throw new IllegalStateException();
+
+        for (File file : files) {
+            classes.addAll(scanSubPackages(file, packageName));
+        }
+
+        return classes;
+    }
+
+    private List<Class<?>> scanSubPackages(File file, String scannedPackage) {
+
+        List<Class<?>> classes = new ArrayList<>();
+        String resource = scannedPackage + PKG_SEPARATOR + file.getName();
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files == null)
+                throw new IllegalStateException();
+
+            for (File child : files) {
+                classes.addAll(scanSubPackages(child, resource));
+            }
+        } else if (resource.endsWith(CLASS_FILE_SUFFIX)) {
+            int endIndex = resource.length() - CLASS_FILE_SUFFIX.length();
+            String className = resource.substring(0, endIndex);
+            try {
+                classes.add(Class.forName(className));
+            } catch (ClassNotFoundException ignore) {
+            }
+        }
+
+        return classes;
     }
 }
