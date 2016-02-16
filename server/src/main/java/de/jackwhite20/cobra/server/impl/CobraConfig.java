@@ -73,6 +73,9 @@ public abstract class CobraConfig {
         if(!clazz.isAnnotationPresent(Path.class))
             throw new IllegalArgumentException("class " + clazz.getName() + " needs a Path annotation");
 
+        if(classes.contains(clazz))
+            throw new IllegalArgumentException("class " + clazz.getName() + " is already registered");
+
         classes.add(clazz);
     }
 
