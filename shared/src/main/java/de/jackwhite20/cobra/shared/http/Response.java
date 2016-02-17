@@ -34,6 +34,17 @@ public class Response {
 
     private Body body;
 
+    public Response() {
+
+    }
+
+    public Response(Status status, Headers headers, Body body) {
+
+        this.status = status;
+        this.headers = headers;
+        this.body = body;
+    }
+
     public void addDefaultHeaders() {
 
         headers.header("Date", new Date().toString());
