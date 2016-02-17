@@ -25,20 +25,17 @@ import de.jackwhite20.cobra.shared.Status;
 import de.jackwhite20.cobra.shared.http.Body;
 import de.jackwhite20.cobra.shared.http.Headers;
 import de.jackwhite20.cobra.shared.http.Response;
+import de.jackwhite20.cobra.shared.util.URLUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by JackWhite20 on 01.02.2016.
  */
 public class CobraClientImpl implements CobraClient {
-
-    private static final int CHUNK_SIZE = 2048;
 
     private int connectTimeout;
 
@@ -50,17 +47,6 @@ public class CobraClientImpl implements CobraClient {
     public CobraClientImpl(int connectTimeout) {
 
         this.connectTimeout = connectTimeout;
-    }
-
-    private Headers filterHeaders(Map<String, List<String>> headers) {
-
-        Headers headersReturn = Headers.empty();
-
-        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            headersReturn.header(entry.getKey(), String.join(";", entry.getValue()));
-        }
-
-        return headersReturn;
     }
 
     @Override
@@ -76,45 +62,16 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(body, "body cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
 
-        if (proxy == null) {
-            proxy = Proxy.NO_PROXY;
-        }
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
-        connection.setConnectTimeout(connectTimeout);
-        connection.setRequestMethod("POST");
-
-        for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
-            connection.setRequestProperty(entry.getKey(), entry.getValue());
-        }
-
-        connection.setUseCaches(false);
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "POST");
 
         DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
         writer.write(body.bytes());
         writer.flush();
         writer.close();
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        InputStream inputStream = null;
-        try {
-            inputStream = connection.getInputStream();
-            byte[] chunk = new byte[CHUNK_SIZE];
+        byte[] response = URLUtil.readResponse(connection);
 
-            int i;
-            while ( (i = inputStream.read(chunk)) > 0 ) {
-                byteArrayOutputStream.write(chunk, 0, i);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(inputStream != null)
-                inputStream.close();
-        }
-
-        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(byteArrayOutputStream.toByteArray())).build();
+        return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
     }
 
     @Override
@@ -129,38 +86,11 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(url, "url cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
 
-        if (proxy == null)
-            proxy = Proxy.NO_PROXY;
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "GET");
 
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
-        connection.setConnectTimeout(connectTimeout);
-        connection.setRequestMethod("GET");
+        byte[] response = URLUtil.readResponse(connection);
 
-        for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
-            connection.setRequestProperty(entry.getKey(), entry.getValue());
-        }
-
-        connection.setUseCaches(false);
-        connection.setDoOutput(true);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        InputStream inputStream = null;
-        try {
-            inputStream = connection.getInputStream();
-            byte[] chunk = new byte[CHUNK_SIZE];
-
-            int i;
-            while ( (i = inputStream.read(chunk)) > 0 ) {
-                byteArrayOutputStream.write(chunk, 0, i);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(inputStream != null)
-                inputStream.close();
-        }
-
-        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(byteArrayOutputStream.toByteArray())).build();
+        return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
     }
 
     @Override
@@ -177,19 +107,7 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(folderToSaveTo, "folderToSaveTo cannot be null");
         Preconditions.checkArgument(!folderToSaveTo.isEmpty(), "folderToSaveTo cannot be empty");
 
-        if (proxy == null)
-            proxy = Proxy.NO_PROXY;
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
-        connection.setConnectTimeout(connectTimeout);
-        connection.setRequestMethod("GET");
-
-        for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
-            connection.setRequestProperty(entry.getKey(), entry.getValue());
-        }
-
-        connection.setUseCaches(false);
-        connection.setDoOutput(true);
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "GET");
 
         String disposition = connection.getHeaderField("Content-Disposition");
 
@@ -210,7 +128,7 @@ public class CobraClientImpl implements CobraClient {
         InputStream inputStream = null;
         try {
             inputStream = connection.getInputStream();
-            byte[] chunk = new byte[CHUNK_SIZE];
+            byte[] chunk = new byte[URLUtil.CHUNK_SIZE];
 
             int i;
             while ( (i = inputStream.read(chunk)) > 0 ) {
@@ -226,7 +144,7 @@ public class CobraClientImpl implements CobraClient {
             }
         }
 
-        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content("").build();
+        return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of("".getBytes()));
     }
 
     public int connectTimeout() {
