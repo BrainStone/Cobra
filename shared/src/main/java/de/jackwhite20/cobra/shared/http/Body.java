@@ -40,4 +40,31 @@ public class Body {
 
         return bytes;
     }
+
+    public static Builder form(String key, String value) {
+
+        return new Builder(key, value);
+    }
+
+    public static class Builder {
+
+        private StringBuilder formBody = new StringBuilder();
+
+        public Builder(String key, String value) {
+
+            formBody.append(key).append("=").append(value);
+        }
+
+        public Builder form(String key, String value) {
+
+            formBody.append("&").append(key).append("=").append(value);
+
+            return this;
+        }
+
+        public Body build() {
+
+            return new Body(formBody.toString());
+        }
+    }
 }
