@@ -61,12 +61,22 @@ public class CobraServerImpl implements CobraServer {
 
     private List<RequestFilter> filters = new ArrayList<>();
 
+    public CobraServerImpl() {
+
+    }
+
     public CobraServerImpl(CobraConfig cobraConfig) {
 
         this.cobraConfig = cobraConfig;
-        for (Class<?> aClass : cobraConfig.classes) {
-            scanClass(aClass);
-        }
+        initConfig();
+    }
+
+    private void initConfig() {
+
+        filters.clear();
+        resourceInfo.clear();
+
+        cobraConfig.classes.forEach(this::scanClass);
 
         for (Class<? extends RequestFilter> filter : cobraConfig.filters) {
             try {
@@ -155,6 +165,13 @@ public class CobraServerImpl implements CobraServer {
         }
 
         executorService.shutdown();
+    }
+
+    @Override
+    public void config(CobraConfig cobraConfig) {
+
+        this.cobraConfig = cobraConfig;
+        initConfig();
     }
 
     public void filter(FilteredRequest filteredRequest) {

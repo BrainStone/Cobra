@@ -34,4 +34,9 @@ public class CobraServerFactory {
 
         return new CobraServerImpl(cobraConfig);
     }
+
+    public static CobraServer create() {
+
+        return new CobraServerImpl();
+    }
 }
