@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.client;
 
+import com.google.common.base.Preconditions;
 import de.jackwhite20.cobra.client.impl.CobraClientImpl;
 
 /**
@@ -32,6 +33,8 @@ public class CobraClientFactory {
     }
 
     public static CobraClient create(int connectTimeout) {
+
+        Preconditions.checkArgument(connectTimeout < 0, "connectTimeout cannot be negative");
 
         return new CobraClientImpl(connectTimeout);
     }
