@@ -22,6 +22,7 @@ package de.jackwhite20.cobra.server.http;
 import de.jackwhite20.cobra.server.filter.FilteredRequest;
 import de.jackwhite20.cobra.server.impl.CobraServerImpl;
 import de.jackwhite20.cobra.shared.RequestMethod;
+import de.jackwhite20.cobra.shared.http.Response;
 
 import java.io.*;
 import java.net.Socket;
@@ -32,7 +33,7 @@ import java.util.Map;
  */
 public class HTTPHandler implements Runnable {
 
-    private static final byte[] NEW_LINE = "\n\r".getBytes();
+    private static final byte[] NEW_LINE = "\n".getBytes();
 
     private Socket socket;
 
@@ -85,15 +86,15 @@ public class HTTPHandler implements Runnable {
 
                 Response response = (filteredRequest.response() == null) ? cobraServer.handleRequest(httpRequest) : filteredRequest.response();
                 response.addDefaultHeaders();
-                outputStream.write((response.version() + " " + response.responseCode() + " " + response.responseReason()).getBytes());
+                outputStream.write((Response.VERSION + " " + response.responseCode() + " " + response.responseReason()).getBytes());
                 outputStream.write(NEW_LINE);
-                for (Map.Entry<String, String> header : response.headers().entrySet()) {
+                for (Map.Entry<String, String> header : response.headers().headers().entrySet()) {
                     outputStream.write((header.getKey() + ": " + header.getValue()).getBytes());
                     outputStream.write(NEW_LINE);
                 }
                 outputStream.write(NEW_LINE);
-                if (response.content() != null)
-                    outputStream.write(response.content());
+                if (response.body() != null)
+                    outputStream.write(response.body().bytes());
                 outputStream.flush();
             }
         } catch (Exception e) {

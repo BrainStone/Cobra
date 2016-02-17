@@ -19,7 +19,7 @@
 
 import de.jackwhite20.cobra.server.filter.FilteredRequest;
 import de.jackwhite20.cobra.server.filter.RequestFilter;
-import de.jackwhite20.cobra.server.http.Response;
+import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.Status;
 
 /**

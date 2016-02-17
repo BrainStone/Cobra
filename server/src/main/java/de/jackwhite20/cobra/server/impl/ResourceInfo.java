@@ -20,7 +20,7 @@
 package de.jackwhite20.cobra.server.impl;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.server.http.Response;
+import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
 
@@ -71,7 +71,7 @@ public class ResourceInfo {
                 }
 
                 Response response = ((Response) entry.method.invoke(object, objects));
-                response.headers().put("Content-Type", entry.contentType);
+                response.header("Content-Type", entry.contentType);
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();
