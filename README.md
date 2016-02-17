@@ -1,6 +1,12 @@
 # Cobra
 Cobra is a simple RESTful framework to create lightweight RESTful services with Java.
 
+# Supported HTTP methods
+- POST
+- GET
+- PUT
+- DELETE
+
 # Installation
 
 - Install [Maven 3](http://maven.apache.org/download.cgi)
