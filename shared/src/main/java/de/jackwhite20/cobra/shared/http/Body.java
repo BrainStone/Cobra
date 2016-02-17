@@ -51,6 +51,16 @@ public class Body {
         return new Builder(key, value);
     }
 
+    public static Body of(byte[] bytes) {
+
+        return new Body(bytes);
+    }
+
+    public static Body of(String content) {
+
+        return new Body(content);
+    }
+
     public static class Builder {
 
         private StringBuilder formBody = new StringBuilder();
