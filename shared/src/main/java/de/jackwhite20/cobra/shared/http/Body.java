@@ -41,6 +41,11 @@ public class Body {
         return bytes;
     }
 
+    public String content() {
+
+        return new String(bytes);
+    }
+
     public static Builder form(String key, String value) {
 
         return new Builder(key, value);
