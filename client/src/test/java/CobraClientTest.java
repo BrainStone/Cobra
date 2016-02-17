@@ -34,7 +34,7 @@ public class CobraClientTest {
     public static void main(String[] args) throws Exception {
 
         CobraClient client = CobraClientFactory.create();
-        Response response = client.post(new URL("http://localhost:8080/master/info"), new Body("name=Name&password=Password"), Headers.empty());
+        Response response = client.post(new URL("http://localhost:8080/master/info"), Body.form("name", "Name").form("password", "Password").build(), Headers.empty());
         System.out.println("Status: " + response.status());
         System.out.println("Body: " + new String(response.body().bytes()));
         for (Map.Entry<String, String> entry : response.headersMap().entrySet()) {
