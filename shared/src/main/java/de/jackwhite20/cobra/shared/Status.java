@@ -65,4 +65,14 @@ public enum Status {
 
         return reason;
     }
+
+    public static Status valueOf(int code) {
+
+        for (Status status : values()) {
+            if(status.code == code)
+                return status;
+        }
+
+        return null;
+    }
 }
