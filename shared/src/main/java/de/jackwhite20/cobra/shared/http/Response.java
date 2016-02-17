@@ -17,80 +17,67 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jackwhite20.cobra.server.http;
+package de.jackwhite20.cobra.shared.http;
 
 import de.jackwhite20.cobra.shared.Status;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class Response {
 
-    private String version = "HTTP/1.1";
+    public static final String VERSION = "HTTP/1.1";
 
-    private int responseCode = 200;
+    private Status status;
 
-    private String responseReason = "OK";
+    private Headers headers = new Headers();
 
-    private Map<String, String> headers = new LinkedHashMap<>();
-
-    private byte[] content;
+    private Body body;
 
     public void addDefaultHeaders() {
 
-        headers.put("Date", new Date().toString());
-        headers.put("Server", "Cobra 0.1");
-        headers.put("Connection", "close");
+        headers.header("Date", new Date().toString());
+        headers.header("Server", "Cobra 0.1");
+        headers.header("Connection", "close");
         //headers.put("Content-Type", "text/html; charset=utf-8");
-        if(content != null)
-            headers.put("Content-Length", Integer.toString(content.length));
+        if(body != null)
+            headers.header("Content-Length", Integer.toString(body.bytes().length));
     }
 
-    public String version() {
+    public Status status() {
 
-        return version;
+        return status;
     }
 
     public int responseCode() {
 
-        return responseCode;
+        return status.status();
     }
 
     public String responseReason() {
 
-        return responseReason;
+        return status.reason();
     }
 
-    public Map<String, String> headers() {
+    public Headers headers() {
 
         return headers;
     }
 
-    public byte[] content() {
+    public Body body() {
 
-        return content;
+        return body;
     }
 
-    public void responseCode(int responseCode) {
+    public Response header(String name, String value) {
 
-        this.responseCode = responseCode;
+        headers.header(name, value);
+
+        return this;
     }
 
-    public void responseReason(String responseReason) {
-
-        this.responseReason = responseReason;
-    }
-
-    public void headers(Map<String, String> headers) {
+    public void headers(Headers headers) {
 
         this.headers = headers;
-    }
-
-    public void content(byte[] content) {
-
-        this.content = content;
     }
 
     public static Builder ok() {
@@ -100,28 +87,32 @@ public class Response {
 
     public static Builder status(Status status) {
 
-        return new Builder(status.status(), status.reason());
+        return new Builder(status);
     }
 
     public static class Builder {
 
-        private int status;
+        private Status status;
 
-        private String reason = "";
+        private Body body;
 
-        private byte[] content;
+        private Headers headers = new Headers();
 
-        private HashMap<String, String> headers = new HashMap<>();
-
-        public Builder(int status, String statusReason) {
+        public Builder(Status status) {
 
             this.status = status;
-            this.reason = statusReason;
         }
 
         public Builder content(byte[] content) {
 
-            this.content = content;
+            this.body = new Body(content);
+
+            return this;
+        }
+
+        public Builder content(Body body) {
+
+            this.body = body;
 
             return this;
         }
@@ -134,7 +125,7 @@ public class Response {
 
         public Builder header(String key, String value) {
 
-            headers.put(key, value);
+            headers.header(key, value);
 
             return this;
         }
@@ -142,9 +133,8 @@ public class Response {
         public Response build() {
 
             Response response = new Response();
-            response.responseCode = status;
-            response.responseReason = reason;
-            response.content = content;
+            response.status = status;
+            response.body = body;
             response.headers(headers);
 
             return response;
