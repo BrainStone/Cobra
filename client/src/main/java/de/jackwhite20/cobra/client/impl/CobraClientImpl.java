@@ -154,6 +154,67 @@ public class CobraClientImpl implements CobraClient {
         return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(byteArrayOutputStream.toByteArray())).build();
     }
 
+    @Override
+    public Response download(URL url, Headers headers, String folderToSaveTo) throws IOException {
+
+        return download(url, null, headers, folderToSaveTo);
+    }
+
+    @Override
+    public Response download(URL url, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException {
+
+        if (proxy == null)
+            proxy = Proxy.NO_PROXY;
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+        connection.setConnectTimeout(connectTimeout);
+        connection.setRequestMethod("GET");
+
+        for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
+            connection.setRequestProperty(entry.getKey(), entry.getValue());
+        }
+
+        connection.setUseCaches(false);
+        connection.setDoOutput(true);
+
+        String disposition = connection.getHeaderField("Content-Disposition");
+
+        if(disposition == null)
+            throw new IllegalArgumentException("no 'Content-Disposition' header present");
+
+        String fileName = null;
+
+        int index = disposition.indexOf("filename=");
+        if (index > 0) {
+            fileName = disposition.substring(index + 10, disposition.length() - 1);
+        }
+
+        if(fileName == null)
+            throw new IllegalStateException("unable to get the file name from the disposition header");
+
+        FileOutputStream fileOutputStream = new FileOutputStream(folderToSaveTo + File.separator + fileName);
+        InputStream inputStream = null;
+        try {
+            inputStream = connection.getInputStream();
+            byte[] chunk = new byte[CHUNK_SIZE];
+
+            int i;
+            while ( (i = inputStream.read(chunk)) > 0 ) {
+                fileOutputStream.write(chunk, 0, i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            fileOutputStream.close();
+
+            if(inputStream != null) {
+                inputStream.close();
+            }
+        }
+
+        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content("").build();
+    }
+
     public int connectTimeout() {
 
         return connectTimeout;

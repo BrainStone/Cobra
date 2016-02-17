@@ -39,4 +39,8 @@ public interface CobraClient {
     Response get(URL url, Proxy proxy, Headers headers) throws IOException;
 
     Response get(URL url, Headers headers) throws IOException;
+
+    Response download(URL url, Headers headers, String folderToSaveTo) throws IOException;
+
+    Response download(URL url, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException;
 }
