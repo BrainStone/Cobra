@@ -22,6 +22,7 @@ package de.jackwhite20.cobra.shared.http;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class Response {
 
@@ -61,6 +62,11 @@ public class Response {
     public Headers headers() {
 
         return headers;
+    }
+
+    public HashMap<String, String> headersMap() {
+
+        return headers.headers();
     }
 
     public Body body() {
@@ -126,6 +132,13 @@ public class Response {
         public Builder header(String key, String value) {
 
             headers.header(key, value);
+
+            return this;
+        }
+
+        public Builder headers(Headers headers) {
+
+            this.headers = headers;
 
             return this;
         }
