@@ -20,7 +20,7 @@
 package de.jackwhite20.cobra.server.filter;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.server.http.Response;
+import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.RequestMethod;
 
 /**

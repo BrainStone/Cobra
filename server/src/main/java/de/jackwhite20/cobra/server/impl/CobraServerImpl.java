@@ -29,7 +29,7 @@ import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.server.http.annotation.method.PUT;
 import de.jackwhite20.cobra.shared.ContentType;
 import de.jackwhite20.cobra.shared.RequestMethod;
-import de.jackwhite20.cobra.server.http.Response;
+import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.io.IOException;
