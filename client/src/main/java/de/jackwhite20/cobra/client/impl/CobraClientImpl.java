@@ -25,10 +25,7 @@ import de.jackwhite20.cobra.shared.http.Body;
 import de.jackwhite20.cobra.shared.http.Headers;
 import de.jackwhite20.cobra.shared.http.Response;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
@@ -39,6 +36,8 @@ import java.util.Map;
  * Created by JackWhite20 on 01.02.2016.
  */
 public class CobraClientImpl implements CobraClient {
+
+    private static final int CHUNK_SIZE = 2048;
 
     private int connectTimeout;
 
@@ -92,20 +91,24 @@ public class CobraClientImpl implements CobraClient {
         writer.flush();
         writer.close();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if(line.isEmpty() || line.contains(":"))
-                continue;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        InputStream inputStream = null;
+        try {
+            inputStream = connection.getInputStream();
+            byte[] chunk = new byte[CHUNK_SIZE];
 
-            response.append(line);
-            response.append('\n');
+            int i;
+            while ( (i = inputStream.read(chunk)) > 0 ) {
+                byteArrayOutputStream.write(chunk, 0, i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(inputStream != null)
+                inputStream.close();
         }
 
-        reader.close();
-
-        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(response.toString())).build();
+        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(byteArrayOutputStream.toByteArray())).build();
     }
 
     @Override
@@ -131,20 +134,24 @@ public class CobraClientImpl implements CobraClient {
         connection.setUseCaches(false);
         connection.setDoOutput(true);
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if(line.isEmpty() || line.contains(":"))
-                continue;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        InputStream inputStream = null;
+        try {
+            inputStream = connection.getInputStream();
+            byte[] chunk = new byte[CHUNK_SIZE];
 
-            response.append(line);
-            response.append('\n');
+            int i;
+            while ( (i = inputStream.read(chunk)) > 0 ) {
+                byteArrayOutputStream.write(chunk, 0, i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(inputStream != null)
+                inputStream.close();
         }
 
-        reader.close();
-
-        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(response.toString())).build();
+        return Response.status(Status.valueOf(connection.getResponseCode())).headers(filterHeaders(connection.getHeaderFields())).content(new Body(byteArrayOutputStream.toByteArray())).build();
     }
 
     public int connectTimeout() {
