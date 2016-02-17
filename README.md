@@ -39,6 +39,13 @@ try {
 }
 ```
 
+_Simple file download:_
+```java
+CobraClient client = CobraClientFactory.create();
+Response response = client.download(new URL("http://somesite.net:8080/some/download/path"), Headers.empty(), "C:\\Some\\Path\\To\\A\\Folder");
+System.out.println("Status: " + response.status());
+```
+
 ### License
 
 Licensed under the GNU General Public License, Version 3.0.
