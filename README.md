@@ -1,6 +1,30 @@
 # Cobra
 Cobra is a simple RESTful framework to create lightweight RESTful services with Java.
 
+# Installation
+
+- Install [Maven 3](http://maven.apache.org/download.cgi)
+- Clone/Download this repo
+- Install it with: ```mvn clean install```
+
+**Maven dependencies**
+_Client:_
+```xml
+<dependency>
+    <groupId>de.jackwhite20</groupId>
+    <artifactId>cobra-client</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+_Server:_
+```xml
+<dependency>
+    <groupId>de.jackwhite20</groupId>
+    <artifactId>cobra-server</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+
 # Quick start
 
 ### Client
@@ -46,6 +70,6 @@ Response response = client.download(new URL("http://somesite.net:8080/some/downl
 System.out.println("Status: " + response.status());
 ```
 
-### License
+# License
 
 Licensed under the GNU General Public License, Version 3.0.
