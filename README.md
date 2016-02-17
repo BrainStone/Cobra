@@ -70,6 +70,73 @@ Response response = client.download(new URL("http://somesite.net:8080/some/downl
 System.out.println("Status: " + response.status());
 ```
 
+### Server
+_Example RESTful server:_
+```java
+import de.jackwhite20.cobra.server.CobraServer;
+import de.jackwhite20.cobra.server.CobraServerFactory;
+import de.jackwhite20.cobra.server.http.Request;
+import de.jackwhite20.cobra.server.http.annotation.FormParam;
+import de.jackwhite20.cobra.server.http.annotation.Path;
+import de.jackwhite20.cobra.server.http.annotation.Produces;
+import de.jackwhite20.cobra.server.http.annotation.method.GET;
+import de.jackwhite20.cobra.server.http.annotation.method.POST;
+import de.jackwhite20.cobra.server.impl.CobraConfig;
+import de.jackwhite20.cobra.shared.ContentType;
+import de.jackwhite20.cobra.shared.http.Response;
+
+/**
+ * Created by JackWhite20 on 17.02.2016.
+ */
+public class ExampleCobraServer {
+
+    public static void main(String[] args) {
+
+		// Create a new server instance with the cobra config below
+        CobraServer cobraServer = CobraServerFactory.create(new ExampleConfig());
+        // Start the server
+        cobraServer.start();
+    }
+
+    public static class ExampleConfig extends CobraConfig {
+
+        public ExampleConfig() {
+
+			// Set the listening host ip
+            host("0.0.0.0");
+            // Set the port to listen on
+            port(8080);
+
+			// Register our example resource
+            register(ExampleResource.class);
+        }
+    }
+
+    @Path("/rest/v1")
+    public static class ExampleResource {
+
+        @GET
+        @Path("/hello")
+        @Produces(ContentType.TEXT_HTML)
+        public Response hello(Request httpRequest) {
+
+            return Response.ok().content("<H1>Hello</H1>").build();
+        }
+
+        @POST
+        @Path("/world")
+        @Produces(ContentType.TEXT_HTML)
+        public Response world(Request httpRequest, @FormParam("name") String name) {
+
+            return Response.ok()
+                    .content("<H1>World " + name + "!</H1>")
+                    .header("X-Test", "Hello xD")
+                    .build();
+        }
+    }
+}
+```
+
 # License
 
 Licensed under the GNU General Public License, Version 3.0.
