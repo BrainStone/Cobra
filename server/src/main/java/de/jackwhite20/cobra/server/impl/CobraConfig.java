@@ -50,10 +50,16 @@ public abstract class CobraConfig {
 
     public void host(String host) {
 
+        if (host == null)
+            throw new IllegalArgumentException("host cannot be null");
+
         this.host = host;
     }
 
     public void port(int port) {
+
+        if(port < 0)
+            throw new IllegalArgumentException("port cannot be negative");
 
         this.port = port;
     }
@@ -65,10 +71,16 @@ public abstract class CobraConfig {
 
     public void filter(Class<? extends RequestFilter> filter) {
 
+        if(filter == null)
+            throw new IllegalArgumentException("filter cannot be null");
+
         this.filters.add(filter);
     }
 
     public void register(Class<?> clazz) {
+
+        if(clazz == null)
+            throw new IllegalArgumentException("clazz cannot be null");
 
         if(!clazz.isAnnotationPresent(Path.class))
             throw new IllegalArgumentException("class " + clazz.getName() + " needs a Path annotation");
@@ -89,7 +101,7 @@ public abstract class CobraConfig {
         String scannedPath = packageName.replace(PKG_SEPARATOR, DIR_SEPARATOR);
         URL url = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
         if (url == null)
-            throw new IllegalArgumentException("package \"" + packageName + "\" does not exist");
+            throw new IllegalArgumentException("package " + packageName + " does not exist");
 
         File scannedDir = new File(url.getFile());
         List<Class<?>> classes = new ArrayList<>();
