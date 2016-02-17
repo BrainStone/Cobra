@@ -8,6 +8,7 @@ Cobra is a simple RESTful framework to create lightweight RESTful services with 
 - Install it with: ```mvn clean install```
 
 **Maven dependencies**
+
 _Client:_
 ```xml
 <dependency>
