@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.client.impl;
 
+import com.google.common.base.Preconditions;
 import de.jackwhite20.cobra.client.CobraClient;
 import de.jackwhite20.cobra.shared.Status;
 import de.jackwhite20.cobra.shared.http.Body;
@@ -65,14 +66,19 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response post(URL url, Body body, Headers headers) throws IOException {
 
-        return post(url, Proxy.NO_PROXY, body, headers);
+        return post(url, null, body, headers);
     }
 
     @Override
     public Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException {
 
-        if (proxy == null)
+        Preconditions.checkNotNull(url, "url cannot be null");
+        Preconditions.checkNotNull(body, "body cannot be null");
+        Preconditions.checkNotNull(headers, "headers cannot be null");
+
+        if (proxy == null) {
             proxy = Proxy.NO_PROXY;
+        }
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
         connection.setConnectTimeout(connectTimeout);
@@ -114,11 +120,14 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response get(URL url, Headers headers) throws IOException {
 
-        return get(url, Proxy.NO_PROXY, headers);
+        return get(url, null, headers);
     }
 
     @Override
     public Response get(URL url, Proxy proxy, Headers headers) throws IOException {
+
+        Preconditions.checkNotNull(url, "url cannot be null");
+        Preconditions.checkNotNull(headers, "headers cannot be null");
 
         if (proxy == null)
             proxy = Proxy.NO_PROXY;
@@ -162,6 +171,11 @@ public class CobraClientImpl implements CobraClient {
 
     @Override
     public Response download(URL url, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException {
+
+        Preconditions.checkNotNull(url, "url cannot be null");
+        Preconditions.checkNotNull(headers, "headers cannot be null");
+        Preconditions.checkNotNull(folderToSaveTo, "folderToSaveTo cannot be null");
+        Preconditions.checkArgument(!folderToSaveTo.isEmpty(), "folderToSaveTo cannot be empty");
 
         if (proxy == null)
             proxy = Proxy.NO_PROXY;
