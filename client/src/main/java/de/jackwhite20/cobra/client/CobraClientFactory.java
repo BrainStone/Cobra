@@ -19,24 +19,20 @@
 
 package de.jackwhite20.cobra.client;
 
-import de.jackwhite20.cobra.client.impl.http.HTTPBody;
-import de.jackwhite20.cobra.client.impl.http.HTTPHeader;
-import de.jackwhite20.cobra.client.impl.http.HTTPResponse;
-
-import java.io.IOException;
-import java.net.Proxy;
-import java.net.URL;
+import de.jackwhite20.cobra.client.impl.CobraClientImpl;
 
 /**
  * Created by JackWhite20 on 17.02.2016.
  */
-public interface CobraClient {
+public class CobraClientFactory {
 
-    String post(URL url, HTTPBody body, HTTPHeader... headers) throws IOException;
+    public static CobraClient create() {
 
-    String post(URL url, Proxy proxy, HTTPBody body, HTTPHeader... headers) throws IOException;
+        return new CobraClientImpl();
+    }
 
-    HTTPResponse get(URL url, Proxy proxy, HTTPHeader... headers) throws IOException;
+    public static CobraClient create(int connectTimeout) {
 
-    HTTPResponse get(URL url, HTTPHeader... headers) throws IOException;
+        return new CobraClientImpl(connectTimeout);
+    }
 }
