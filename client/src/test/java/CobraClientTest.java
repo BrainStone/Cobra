@@ -17,26 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jackwhite20.cobra.client;
-
+import de.jackwhite20.cobra.client.CobraClient;
+import de.jackwhite20.cobra.client.CobraClientFactory;
 import de.jackwhite20.cobra.shared.http.Body;
 import de.jackwhite20.cobra.shared.http.Headers;
 import de.jackwhite20.cobra.shared.http.Response;
 
-import java.io.IOException;
-import java.net.Proxy;
 import java.net.URL;
+import java.util.Map;
 
 /**
- * Created by JackWhite20 on 17.02.2016.
+ * Created by JackWhite20 on 04.02.2016.
  */
-public interface CobraClient {
+public class CobraClientTest {
 
-    Response post(URL url, Body body, Headers headers) throws IOException;
+    public static void main(String[] args) throws Exception {
 
-    Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException;
-
-    Response get(URL url, Proxy proxy, Headers headers) throws IOException;
-
-    Response get(URL url, Headers headers) throws IOException;
+        CobraClient client = CobraClientFactory.create();
+        Response response = client.post(new URL("http://localhost:8080/master/info"), new Body("name=Name&password=Password"), Headers.empty());
+        System.out.println("Status: " + response.status());
+        System.out.println("Body: " + new String(response.body().bytes()));
+        for (Map.Entry<String, String> entry : response.headersMap().entrySet()) {
+            System.out.println("Header: " + entry.getKey() + ": " + entry.getValue());
+        }
+    }
 }
