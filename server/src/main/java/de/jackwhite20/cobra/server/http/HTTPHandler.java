@@ -104,16 +104,6 @@ public class HTTPHandler implements Runnable {
                 socket.close();
             } catch (IOException ignored) {
             }
-
-            try {
-                bufferedReader.close();
-            } catch (IOException ignored) {
-            }
-
-            try {
-                outputStream.close();
-            } catch (IOException ignored) {
-            }
         }
     }
 }
