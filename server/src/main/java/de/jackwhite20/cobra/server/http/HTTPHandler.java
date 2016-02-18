@@ -63,7 +63,7 @@ public class HTTPHandler implements Runnable {
         try {
             String line;
             while ((line = bufferedReader.readLine()) != null && (line.length() != 0)) {
-                lines.append(line).append("\n\r");
+                lines.append(line).append("\n");
             }
 
             if(!lines.toString().isEmpty()) {
