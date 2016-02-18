@@ -36,6 +36,14 @@ public interface CobraClient {
 
     Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException;
 
+    Response put(URL url, Headers headers) throws IOException;
+
+    Response put(URL url, Proxy proxy, Headers headers) throws IOException;
+
+    Response delete(URL url, Headers headers) throws IOException;
+
+    Response delete(URL url, Proxy proxy, Headers headers) throws IOException;
+
     Response get(URL url, Proxy proxy, Headers headers) throws IOException;
 
     Response get(URL url, Headers headers) throws IOException;

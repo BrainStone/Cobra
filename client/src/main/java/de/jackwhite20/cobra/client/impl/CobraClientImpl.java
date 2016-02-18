@@ -58,6 +58,9 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException {
 
+        if(proxy == null)
+            proxy = Proxy.NO_PROXY;
+
         Preconditions.checkNotNull(url, "url cannot be null");
         Preconditions.checkNotNull(body, "body cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
@@ -75,6 +78,30 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public Response put(URL url, Headers headers) throws IOException {
+
+        return put(url, null, headers);
+    }
+
+    @Override
+    public Response put(URL url, Proxy proxy, Headers headers) throws IOException {
+
+        return request(url, proxy, headers, "PUT");
+    }
+
+    @Override
+    public Response delete(URL url, Headers headers) throws IOException {
+
+        return delete(url, null, headers);
+    }
+
+    @Override
+    public Response delete(URL url, Proxy proxy, Headers headers) throws IOException {
+
+        return request(url, proxy, headers, "DELETE");
+    }
+
+    @Override
     public Response get(URL url, Headers headers) throws IOException {
 
         return get(url, null, headers);
@@ -83,14 +110,7 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response get(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        Preconditions.checkNotNull(url, "url cannot be null");
-        Preconditions.checkNotNull(headers, "headers cannot be null");
-
-        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "GET");
-
-        byte[] response = URLUtil.readResponse(connection);
-
-        return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
+        return request(url, proxy, headers, "GET");
     }
 
     @Override
@@ -145,6 +165,18 @@ public class CobraClientImpl implements CobraClient {
         }
 
         return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of("".getBytes()));
+    }
+
+    private Response request(URL url, Proxy proxy, Headers headers, String method) throws IOException {
+
+        Preconditions.checkNotNull(url, "url cannot be null");
+        Preconditions.checkNotNull(headers, "headers cannot be null");
+
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, method);
+
+        byte[] response = URLUtil.readResponse(connection);
+
+        return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
     }
 
     public int connectTimeout() {
