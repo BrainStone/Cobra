@@ -45,23 +45,33 @@ public class TestResource {
     @Produces(ContentType.TEXT_HTML)
     public Response info(Request httpRequest, @FormParam("name") String name, @FormParam("password") String password) {
 
-        System.out.println("Name: " + httpRequest.post("name"));
-        System.out.println("Password: " + httpRequest.post("password"));
+        System.out.println("Name: " + name);
+        System.out.println("Password: " + password);
 
-        System.out.println("Name2: " + name);
-        System.out.println("Password2: " + password);
-
-        return Response.ok().content("<H1>info " + atomicInteger.getAndIncrement() + "</H1>").header("X-Test", "Hallo :D").build();
+        return Response.ok().content("<H1>info " + atomicInteger.getAndIncrement() + "</H1>").header("X-Test", "Hello :D").build();
     }
 
     @GET
     @Path("/test")
     public Response test(Request httpRequest) {
 
-        //System.out.println("Name: " + httpRequest.post("name"));
-        //System.out.println("Password: " + httpRequest.post("password"));
-
         return Response.ok().content("<H1>test</H1>").build();
+    }
+
+    @GET
+    @Path("/hello/{name}")
+    public Response hello(Request httpRequest, @PathParam String name) {
+
+
+        return Response.ok().content("<H1>Hello " + name + "!</H1>").build();
+    }
+
+    @GET
+    @Path("/bye/{name}/{name2}")
+    public Response bye(Request httpRequest, @PathParam String name, @PathParam String name2) {
+
+
+        return Response.ok().content("<H1>Hello " + name + " " + name2 + "!</H1>").build();
     }
 
     @GET
