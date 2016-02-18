@@ -151,9 +151,9 @@ public class ResourceInfo {
             this.requestMethod = requestMethod;
         }
 
-        public Entry(Method method) {
+        public Entry(Method method, RequestMethod requestMethod) {
 
-            this(method, "text/html; charset=utf-8", "*/*", RequestMethod.GET);
+            this(method, "text/html; charset=utf-8", "*/*", requestMethod);
         }
 
         public void addPostKey(String postKey) {
