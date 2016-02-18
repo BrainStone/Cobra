@@ -112,9 +112,14 @@ public class CobraServerImpl implements CobraServer {
 
                     ResourceInfo.Entry resEntry;
 
-                    // TODO: 04.02.2016
-                    // TODO: Maybe allow Produces annotation only on POST requests
-                    resourceInfo.add(method.getAnnotation(Path.class).value(), (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method)));
+                    String path = method.getAnnotation(Path.class).value();
+                    String copyPath = path;
+
+                    // If path parameters are present, remove them to get the root path
+                    if(path.contains("{"))
+                        path = path.substring(0, path.indexOf("{") - 1);
+
+                    resourceInfo.add(path, (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method)));
 
                     if(method.getParameterCount() > 1) {
                         for (Parameter parameter : method.getParameters()) {
@@ -123,6 +128,26 @@ public class CobraServerImpl implements CobraServer {
                                 resEntry.addPostKey(postKey);
                             }
                         }
+                    }
+
+                    // Getting path variables
+                    String[] splitted = copyPath.split("/");
+                    List<String> rawParams = new ArrayList<>();
+
+                    for (String p : splitted) {
+                        if(!p.isEmpty()) {
+                            if(p.startsWith("{") && p.endsWith("}")) {
+                                p = p.replaceAll("\\{|\\}", "");
+                                rawParams.add(p);
+                            }
+                        }
+                    }
+
+                    if(rawParams.size() > 0) {
+                        if(rawParams.size() != method.getParameterCount() - 1)
+                            throw new IllegalArgumentException("the path parameter count is not equal with the method parameter count of method " + method.getName());
+
+                        rawParams.forEach(resEntry::addPathKey);
                     }
                 }
             }

@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JackWhite20 on 30.01.2016.
@@ -48,7 +49,17 @@ public class ResourceInfo {
 
     public Response execute(String path, Request httpRequest) {
 
-        Entry entry = methods.get(path);
+        // Search the right entry from the path requested because the path can have path parameters
+        for (Map.Entry<String, Entry> entry : methods.entrySet()) {
+            if(path.startsWith(entry.getKey()))
+                return process(entry.getKey(), entry.getValue(), httpRequest);
+        }
+
+        return process("", null, null);
+    }
+
+    private Response process(String mainPath, Entry entry, Request httpRequest) {
+
         if(entry != null) {
             if(!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type")))
                 return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
@@ -57,9 +68,9 @@ public class ResourceInfo {
                 return Response.status(Status.METHOD_NOT_ALLOWED).build();
 
             try {
+                // TODO: Better implementation
                 Object[] objects = { httpRequest };
 
-                // TODO: 04.02.2016
                 if(httpRequest.method() == RequestMethod.POST) {
                     objects = new Object[entry.postParameters.size() + 1];
                     objects[0] = httpRequest;
@@ -68,6 +79,24 @@ public class ResourceInfo {
                         objects[i] = httpRequest.post(parameter);
                         i++;
                     }
+                }
+
+                // Are there any path params?
+                if(entry.pathParameters.size() > 0) {
+                    objects = new Object[entry.pathParameters.size() + 1];
+                    objects[0] = httpRequest;
+
+                    // Get all params from the location
+                    String paramString = httpRequest.location().substring(httpRequest.location().indexOf(mainPath) + mainPath.length(), httpRequest.location().length());
+
+                    // Remove the first slash
+                    paramString = paramString.substring(1);
+
+                    // Split with "/" to get all params
+                    String[] params = paramString.split("/");
+
+                    // Fast array copy
+                    System.arraycopy(params, 0, objects, 1, params.length/* + 1 - 1*/);
                 }
 
                 Response response = ((Response) entry.method.invoke(object, objects));
@@ -108,6 +137,8 @@ public class ResourceInfo {
 
         private List<String> postParameters = new ArrayList<>();
 
+        private List<String> pathParameters = new ArrayList<>();
+
         public Entry(Method method, String contentType, String acceptContentType, RequestMethod requestMethod) {
 
             this.method = method;
@@ -124,6 +155,11 @@ public class ResourceInfo {
         public void addPostKey(String postKey) {
 
             postParameters.add(postKey);
+        }
+
+        public void addPathKey(String pathKey) {
+
+            pathParameters.add(pathKey);
         }
 
         public Method method() {
