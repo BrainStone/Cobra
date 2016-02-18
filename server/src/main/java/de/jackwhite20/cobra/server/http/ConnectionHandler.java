@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * Created by JackWhite20 on 30.01.2016.
  */
-public class HTTPHandler implements Runnable {
+public class ConnectionHandler implements Runnable {
 
     private static final byte[] NEW_LINE = "\n".getBytes();
 
@@ -43,7 +43,7 @@ public class HTTPHandler implements Runnable {
 
     private OutputStream outputStream;
 
-    public HTTPHandler(Socket socket, CobraServerImpl cobraServer) {
+    public ConnectionHandler(Socket socket, CobraServerImpl cobraServer) {
 
         this.socket = socket;
         this.cobraServer = cobraServer;
