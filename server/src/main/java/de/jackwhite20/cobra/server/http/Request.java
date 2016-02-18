@@ -60,7 +60,7 @@ public class Request {
         }
         version = tokenizer.nextToken();
 
-        String[] lines = raw.split("\\r?\\n");
+        String[] lines = raw.split("\\n");
         for (int i = 1; i < lines.length; i++) {
             String[] keyVal = lines[i].split(":", 2);
 
