@@ -25,6 +25,7 @@ import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +92,9 @@ public class ResourceInfo {
 
                     // Remove the first slash
                     paramString = paramString.substring(1);
+
+                    // Decode with the URL decoder
+                    paramString = URLDecoder.decode(paramString, "UTF-8");
 
                     // Split with "/" to get all params
                     String[] params = paramString.split("/");
