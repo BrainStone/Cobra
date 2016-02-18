@@ -77,6 +77,21 @@ try {
 }
 ```
 
+_Simple delete request with a path parameter:_
+```java
+try {
+	CobraClient client = CobraClientFactory.create();
+	Response response = client.delete(new URL("http://localhost:8080/users/1"), Headers.empty());
+    // For multiple words write a '+' instead of a blank
+    //Response response = client.delete(new URL("http://localhost:8080/users/multiple+words+encoded"), Headers.empty());
+    // Of course you can use URLEncoder as well
+    //Response response = client.delete(new URL("http://localhost:8080/users/" + URLEncoder.encode("multiple words encoded", "UTF-8")), Headers.empty());
+	System.out.println("Status: " + response.status());
+} catch (Exception e) {
+	e.printStackTrace();
+}
+```
+
 _Simple file download:_
 ```java
 CobraClient client = CobraClientFactory.create();
@@ -146,6 +161,14 @@ public class ExampleCobraServer {
                     .content("<H1>World " + name + "!</H1>")
                     .header("X-Test", "Hello xD")
                     .build();
+        }
+        
+        @GET
+        @Path("/say/{text}")
+        @Produces(ContentType.TEXT_HTML)
+        public Response hello(Request httpRequest, @PathParam String text) {
+
+            return Response.ok().content("<H1>" + text + "</H1>").build();
         }
     }
 }
