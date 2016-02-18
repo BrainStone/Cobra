@@ -205,7 +205,7 @@ public class CobraServerImpl implements CobraServer {
 
             while (running) {
                 try {
-                    executorService.execute(new HTTPHandler(serverSocket.accept(), CobraServerImpl.this));
+                    executorService.execute(new ConnectionHandler(serverSocket.accept(), CobraServerImpl.this));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
