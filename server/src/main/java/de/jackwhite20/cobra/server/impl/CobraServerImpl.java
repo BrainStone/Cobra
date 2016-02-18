@@ -119,7 +119,7 @@ public class CobraServerImpl implements CobraServer {
                     if(path.contains("{"))
                         path = path.substring(0, path.indexOf("{") - 1);
 
-                    resourceInfo.add(path, (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method)));
+                    resourceInfo.add(path, (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method, requestMethod)));
 
                     if(method.getParameterCount() > 1) {
                         for (Parameter parameter : method.getParameters()) {
