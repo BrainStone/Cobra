@@ -1,6 +1,13 @@
 # Cobra
 Cobra is a simple RESTful framework to create lightweight RESTful services with Java.
 
+The Server part of Cobra is a very easy to use framework inspired by the JAX-RS API and the Client is a cool and neat API to send requests and get responses from such services.
+
+It is written with the default Java threading model. In the background it uses a thread cache and pool to maximize the performance. It also uses a very basic ServerSocket for accepting connections, because it is the best for the short lifetime of the connections.
+There is no need for complex I/O multiplexing.
+
+Cobra is very decent by design and there for of course high-performance.
+
 # Supported HTTP methods
 - POST
 - GET
