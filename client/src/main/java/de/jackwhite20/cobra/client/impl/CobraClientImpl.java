@@ -58,9 +58,6 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException {
 
-        if(proxy == null)
-            proxy = Proxy.NO_PROXY;
-
         Preconditions.checkNotNull(url, "url cannot be null");
         Preconditions.checkNotNull(body, "body cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
