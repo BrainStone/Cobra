@@ -138,6 +138,9 @@ public class ExampleCobraServer {
 
 			// Register our example resource
             register(ExampleResource.class);
+            
+            // Register our example filter
+            filter(ExampleFilter.class);
         }
     }
 
@@ -169,6 +172,19 @@ public class ExampleCobraServer {
         public Response hello(Request httpRequest, @PathParam String text) {
 
             return Response.ok().content("<H1>" + text + "</H1>").build();
+        }
+    }
+    
+    public static class ExampleFilter implements RequestFilter {
+
+        @Override
+        public void filter(FilteredRequest request) {
+
+            // Here you can filter for headers or anything the request object has
+            if(request.header("X-Special-Header") == null) {
+                // Abort it
+                request.abortWith(Response.status(Status.FORBIDDEN).build());
+            }
         }
     }
 }
