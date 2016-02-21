@@ -69,7 +69,7 @@ public enum Status {
     public static Status valueOf(int code) {
 
         for (Status status : values()) {
-            if(status.code == code)
+            if (status.code == code)
                 return status;
         }
 

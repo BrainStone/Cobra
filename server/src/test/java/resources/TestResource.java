@@ -19,13 +19,16 @@
 
 package resources;
 
-import de.jackwhite20.cobra.server.http.annotation.*;
+import de.jackwhite20.cobra.server.http.Request;
+import de.jackwhite20.cobra.server.http.annotation.FormParam;
+import de.jackwhite20.cobra.server.http.annotation.Path;
+import de.jackwhite20.cobra.server.http.annotation.PathParam;
+import de.jackwhite20.cobra.server.http.annotation.Produces;
 import de.jackwhite20.cobra.server.http.annotation.method.GET;
 import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.shared.ContentType;
-import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.Status;
+import de.jackwhite20.cobra.shared.http.Response;
 
 import java.io.IOException;
 import java.nio.file.Files;

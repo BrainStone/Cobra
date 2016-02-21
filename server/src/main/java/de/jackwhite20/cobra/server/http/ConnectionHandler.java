@@ -24,7 +24,10 @@ import de.jackwhite20.cobra.server.impl.CobraServerImpl;
 import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.http.Response;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map;
 
@@ -66,7 +69,7 @@ public class ConnectionHandler implements Runnable {
                 lines.append(line).append("\n");
             }
 
-            if(!lines.toString().isEmpty()) {
+            if (!lines.toString().isEmpty()) {
                 Request httpRequest = new Request(lines.toString());
                 if (httpRequest.method() == RequestMethod.POST) {
                     int length = Integer.parseInt(httpRequest.header("Content-Length"));
@@ -77,7 +80,7 @@ public class ConnectionHandler implements Runnable {
                     }
                 }
 
-                if(httpRequest.location().isEmpty())
+                if (httpRequest.location().isEmpty())
                     httpRequest.location = "*";
 
                 // TODO: 04.02.2016

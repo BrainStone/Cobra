@@ -19,8 +19,8 @@
 
 import de.jackwhite20.cobra.server.filter.FilteredRequest;
 import de.jackwhite20.cobra.server.filter.RequestFilter;
-import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.Status;
+import de.jackwhite20.cobra.shared.http.Response;
 
 /**
  * Created by JackWhite20 on 31.01.2016.
@@ -30,7 +30,7 @@ public class TestFilter implements RequestFilter {
     @Override
     public void filter(FilteredRequest request) {
 
-        if(request.header("X-Test") != null)
+        if (request.header("X-Test") != null)
             request.abortWith(Response.status(Status.FORBIDDEN).build());
     }
 }

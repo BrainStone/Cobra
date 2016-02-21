@@ -20,9 +20,9 @@
 package resources;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.shared.http.Response;
-import de.jackwhite20.cobra.server.http.annotation.method.GET;
 import de.jackwhite20.cobra.server.http.annotation.Path;
+import de.jackwhite20.cobra.server.http.annotation.method.GET;
+import de.jackwhite20.cobra.shared.http.Response;
 
 /**
  * Created by JackWhite20 on 04.02.2016.

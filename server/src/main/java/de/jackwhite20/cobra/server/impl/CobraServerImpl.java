@@ -22,15 +22,19 @@ package de.jackwhite20.cobra.server.impl;
 import de.jackwhite20.cobra.server.CobraServer;
 import de.jackwhite20.cobra.server.filter.FilteredRequest;
 import de.jackwhite20.cobra.server.filter.RequestFilter;
-import de.jackwhite20.cobra.server.http.*;
-import de.jackwhite20.cobra.server.http.annotation.*;
+import de.jackwhite20.cobra.server.http.ConnectionHandler;
+import de.jackwhite20.cobra.server.http.Request;
+import de.jackwhite20.cobra.server.http.annotation.Consumes;
+import de.jackwhite20.cobra.server.http.annotation.FormParam;
+import de.jackwhite20.cobra.server.http.annotation.Path;
+import de.jackwhite20.cobra.server.http.annotation.Produces;
 import de.jackwhite20.cobra.server.http.annotation.method.DELETE;
 import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.server.http.annotation.method.PUT;
 import de.jackwhite20.cobra.shared.ContentType;
 import de.jackwhite20.cobra.shared.RequestMethod;
-import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.Status;
+import de.jackwhite20.cobra.shared.http.Response;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -50,7 +54,7 @@ import java.util.concurrent.Executors;
 public class CobraServerImpl implements CobraServer {
 
     private boolean running;
-    
+
     private CobraConfig cobraConfig;
 
     private ServerSocket serverSocket;
@@ -96,18 +100,18 @@ public class CobraServerImpl implements CobraServer {
             e.printStackTrace();
         }
 
-        if(resourceInfo == null)
+        if (resourceInfo == null)
             return;
 
         for (Method method : clazz.getMethods()) {
-            if(method.isAnnotationPresent(Path.class)/* && method.getParameterCount() == 1*/) {
+            if (method.isAnnotationPresent(Path.class)/* && method.getParameterCount() == 1*/) {
                 if (method.getParameterTypes()[0].isAssignableFrom(Request.class)) {
                     RequestMethod requestMethod = RequestMethod.GET;
-                    if(method.isAnnotationPresent(POST.class))
+                    if (method.isAnnotationPresent(POST.class))
                         requestMethod = RequestMethod.POST;
-                    else if(method.isAnnotationPresent(DELETE.class))
+                    else if (method.isAnnotationPresent(DELETE.class))
                         requestMethod = RequestMethod.DELETE;
-                    else if(method.isAnnotationPresent(PUT.class))
+                    else if (method.isAnnotationPresent(PUT.class))
                         requestMethod = RequestMethod.PUT;
 
                     ResourceInfo.Entry resEntry;
@@ -116,14 +120,14 @@ public class CobraServerImpl implements CobraServer {
                     String copyPath = path;
 
                     // If path parameters are present, remove them to get the root path
-                    if(path.contains("{"))
+                    if (path.contains("{"))
                         path = path.substring(0, path.indexOf("{") - 1);
 
                     resourceInfo.add(path, (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method, requestMethod)));
 
-                    if(method.getParameterCount() > 1) {
+                    if (method.getParameterCount() > 1) {
                         for (Parameter parameter : method.getParameters()) {
-                            if(parameter.isAnnotationPresent(FormParam.class)) {
+                            if (parameter.isAnnotationPresent(FormParam.class)) {
                                 String postKey = parameter.getAnnotation(FormParam.class).value();
                                 resEntry.addPostKey(postKey);
                             }
@@ -135,16 +139,16 @@ public class CobraServerImpl implements CobraServer {
                     List<String> rawParams = new ArrayList<>();
 
                     for (String p : splitted) {
-                        if(!p.isEmpty()) {
-                            if(p.startsWith("{") && p.endsWith("}")) {
+                        if (!p.isEmpty()) {
+                            if (p.startsWith("{") && p.endsWith("}")) {
                                 p = p.replaceAll("\\{|\\}", "");
                                 rawParams.add(p);
                             }
                         }
                     }
 
-                    if(rawParams.size() > 0) {
-                        if(rawParams.size() != method.getParameterCount() - 1)
+                    if (rawParams.size() > 0) {
+                        if (rawParams.size() != method.getParameterCount() - 1)
                             throw new IllegalArgumentException("the path parameter count is not equal with the method parameter count of method " + method.getName());
 
                         rawParams.forEach(resEntry::addPathKey);
@@ -159,7 +163,7 @@ public class CobraServerImpl implements CobraServer {
     @Override
     public void start() {
 
-        if(running)
+        if (running)
             throw new IllegalStateException("server is already running");
 
         try {
@@ -176,12 +180,12 @@ public class CobraServerImpl implements CobraServer {
     @Override
     public void stop() {
 
-        if(!running)
+        if (!running)
             throw new IllegalStateException("server is already stopped");
 
         running = false;
 
-        if(serverSocket != null) {
+        if (serverSocket != null) {
             try {
                 serverSocket.close();
             } catch (IOException e) {
@@ -209,7 +213,7 @@ public class CobraServerImpl implements CobraServer {
     public Response handleRequest(Request request) {
 
         for (Map.Entry<String, ResourceInfo> entry : resourceInfo.entrySet()) {
-            if(request.location().startsWith(entry.getKey())) {
+            if (request.location().startsWith(entry.getKey())) {
 
                 return entry.getValue().execute(request.location().replace(entry.getKey(), ""), request);
             }

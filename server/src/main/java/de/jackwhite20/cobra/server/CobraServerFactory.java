@@ -29,7 +29,7 @@ public class CobraServerFactory {
 
     public static CobraServer create(CobraConfig cobraConfig) {
 
-        if(cobraConfig == null)
+        if (cobraConfig == null)
             throw new IllegalArgumentException("cobraConfig cannot be null");
 
         return new CobraServerImpl(cobraConfig);

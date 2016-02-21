@@ -127,7 +127,7 @@ public class CobraClientImpl implements CobraClient {
 
         String disposition = connection.getHeaderField("Content-Disposition");
 
-        if(disposition == null)
+        if (disposition == null)
             throw new IllegalArgumentException("no 'Content-Disposition' header present");
 
         String fileName = null;
@@ -137,7 +137,7 @@ public class CobraClientImpl implements CobraClient {
             fileName = disposition.substring(index + 10, disposition.length() - 1);
         }
 
-        if(fileName == null)
+        if (fileName == null)
             throw new IllegalStateException("unable to get the file name from the disposition header: " + disposition);
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(folderToSaveTo + File.separator + fileName); InputStream inputStream = connection.getInputStream()) {

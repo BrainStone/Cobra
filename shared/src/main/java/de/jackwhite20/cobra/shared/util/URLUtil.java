@@ -57,13 +57,13 @@ public class URLUtil {
             byte[] chunk = new byte[CHUNK_SIZE];
 
             int i;
-            while ( (i = inputStream.read(chunk)) > 0 ) {
+            while ((i = inputStream.read(chunk)) > 0) {
                 byteArrayOutputStream.write(chunk, 0, i);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(inputStream != null)
+            if (inputStream != null)
                 inputStream.close();
         }
 
@@ -72,7 +72,7 @@ public class URLUtil {
 
     public static HttpURLConnection connection(URL url, Proxy proxy, int connectTimeout, Headers headers, String method) throws IOException {
 
-        if(proxy == null)
+        if (proxy == null)
             proxy = Proxy.NO_PROXY;
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);

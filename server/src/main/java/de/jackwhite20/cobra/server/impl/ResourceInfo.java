@@ -20,9 +20,9 @@
 package de.jackwhite20.cobra.server.impl;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.shared.http.Response;
 import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
+import de.jackwhite20.cobra.shared.http.Response;
 
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
@@ -52,7 +52,7 @@ public class ResourceInfo {
 
         // Search the right entry from the path requested because the path can have path parameters
         for (Map.Entry<String, Entry> entry : methods.entrySet()) {
-            if(path.startsWith(entry.getKey()))
+            if (path.startsWith(entry.getKey()))
                 return process(entry.getKey(), entry.getValue(), httpRequest);
         }
 
@@ -61,18 +61,18 @@ public class ResourceInfo {
 
     private Response process(String mainPath, Entry entry, Request httpRequest) {
 
-        if(entry != null) {
-            if(!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type")))
+        if (entry != null) {
+            if (!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type")))
                 return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
 
-            if(!entry.requestMethod.equals(httpRequest.method()))
+            if (!entry.requestMethod.equals(httpRequest.method()))
                 return Response.status(Status.METHOD_NOT_ALLOWED).build();
 
             try {
                 // TODO: Better implementation
-                Object[] objects = { httpRequest };
+                Object[] objects = {httpRequest};
 
-                if(httpRequest.method() == RequestMethod.POST) {
+                if (httpRequest.method() == RequestMethod.POST) {
                     objects = new Object[entry.postParameters.size() + 1];
                     objects[0] = httpRequest;
                     int i = 1;
@@ -83,7 +83,7 @@ public class ResourceInfo {
                 }
 
                 // Are there any path params?
-                if(entry.pathParameters.size() > 0) {
+                if (entry.pathParameters.size() > 0) {
                     objects = new Object[entry.pathParameters.size() + 1];
                     objects[0] = httpRequest;
 
