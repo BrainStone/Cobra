@@ -78,6 +78,7 @@ public class URLUtil {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
         connection.setConnectTimeout(connectTimeout);
         connection.setRequestMethod(method);
+        connection.setRequestProperty("User-Agent", "Cobra v0.1");
 
         for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());

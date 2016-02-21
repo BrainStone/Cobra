@@ -48,7 +48,7 @@ public class Response {
     public void addDefaultHeaders() {
 
         headers.header("Date", new Date().toString());
-        headers.header("Server", "Cobra 0.1");
+        headers.header("Server", "Cobra v0.1");
         headers.header("Connection", "close");
         if (body != null)
             headers.header("Content-Length", Integer.toString(body.bytes().length));
