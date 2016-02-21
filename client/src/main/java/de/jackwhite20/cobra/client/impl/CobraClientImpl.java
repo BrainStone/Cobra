@@ -138,25 +138,14 @@ public class CobraClientImpl implements CobraClient {
         }
 
         if(fileName == null)
-            throw new IllegalStateException("unable to get the file name from the disposition header");
+            throw new IllegalStateException("unable to get the file name from the disposition header: " + disposition);
 
-        FileOutputStream fileOutputStream = new FileOutputStream(folderToSaveTo + File.separator + fileName);
-        InputStream inputStream = null;
-        try {
-            inputStream = connection.getInputStream();
+        try (FileOutputStream fileOutputStream = new FileOutputStream(folderToSaveTo + File.separator + fileName); InputStream inputStream = connection.getInputStream()) {
             byte[] chunk = new byte[URLUtil.CHUNK_SIZE];
 
             int i;
-            while ( (i = inputStream.read(chunk)) > 0 ) {
+            while ((i = inputStream.read(chunk)) > 0) {
                 fileOutputStream.write(chunk, 0, i);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            fileOutputStream.close();
-
-            if(inputStream != null) {
-                inputStream.close();
             }
         }
 
