@@ -50,7 +50,7 @@ public class Response {
         headers.header("Date", new Date().toString());
         headers.header("Server", "Cobra 0.1");
         headers.header("Connection", "close");
-        if(body != null)
+        if (body != null)
             headers.header("Content-Length", Integer.toString(body.bytes().length));
     }
 

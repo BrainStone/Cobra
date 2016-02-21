@@ -58,7 +58,7 @@ public abstract class CobraConfig {
 
     public void port(int port) {
 
-        if(port < 0)
+        if (port < 0)
             throw new IllegalArgumentException("port cannot be negative");
 
         this.port = port;
@@ -71,7 +71,7 @@ public abstract class CobraConfig {
 
     public void filter(Class<? extends RequestFilter> filter) {
 
-        if(filter == null)
+        if (filter == null)
             throw new IllegalArgumentException("filter cannot be null");
 
         this.filters.add(filter);
@@ -79,13 +79,13 @@ public abstract class CobraConfig {
 
     public void register(Class<?> clazz) {
 
-        if(clazz == null)
+        if (clazz == null)
             throw new IllegalArgumentException("clazz cannot be null");
 
-        if(!clazz.isAnnotationPresent(Path.class))
+        if (!clazz.isAnnotationPresent(Path.class))
             throw new IllegalArgumentException("class " + clazz.getName() + " needs a Path annotation");
 
-        if(classes.contains(clazz))
+        if (classes.contains(clazz))
             throw new IllegalArgumentException("class " + clazz.getName() + " is already registered");
 
         classes.add(clazz);
