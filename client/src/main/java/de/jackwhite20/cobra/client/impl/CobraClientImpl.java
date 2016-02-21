@@ -64,10 +64,9 @@ public class CobraClientImpl implements CobraClient {
 
         HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "POST");
 
-        DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
-        writer.write(body.bytes());
-        writer.flush();
-        writer.close();
+        try (DataOutputStream writer = new DataOutputStream(connection.getOutputStream())) {
+            writer.write(body.bytes());
+        }
 
         byte[] response = URLUtil.readResponse(connection);
 
