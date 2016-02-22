@@ -75,13 +75,15 @@ public class ConnectionHandler implements Runnable {
                     int length = Integer.parseInt(httpRequest.header("Content-Length"));
                     if (length > 0) {
                         char[] charArray = new char[length];
-                        bufferedReader.read(charArray, 0, length);
-                        httpRequest.postData(new String(charArray));
+                        int read = bufferedReader.read(charArray, 0, length);
+                        if(read != -1)
+                            httpRequest.postData(new String(charArray));
                     }
                 }
 
-                if (httpRequest.location().isEmpty())
+                if (httpRequest.location().isEmpty()) {
                     httpRequest.location = "*";
+                }
 
                 // TODO: 04.02.2016
                 FilteredRequest filteredRequest = new FilteredRequest(httpRequest);
@@ -96,8 +98,9 @@ public class ConnectionHandler implements Runnable {
                     outputStream.write(NEW_LINE);
                 }
                 outputStream.write(NEW_LINE);
-                if (response.body() != null)
+                if (response.body() != null) {
                     outputStream.write(response.body().bytes());
+                }
                 outputStream.flush();
             }
         } catch (Exception e) {

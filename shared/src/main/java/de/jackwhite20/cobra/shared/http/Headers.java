@@ -20,13 +20,14 @@
 package de.jackwhite20.cobra.shared.http;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by JackWhite20 on 17.02.2016.
  */
 public class Headers {
 
-    private HashMap<String, String> headers = new HashMap<>();
+    private Map<String, String> headers = new HashMap<>();
 
     public Headers header(String name, String value) {
 
@@ -35,7 +36,7 @@ public class Headers {
         return this;
     }
 
-    public HashMap<String, String> headers() {
+    public Map<String, String> headers() {
 
         return headers;
     }

@@ -22,7 +22,7 @@ package de.jackwhite20.cobra.shared.http;
 import de.jackwhite20.cobra.shared.Status;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
 
@@ -50,8 +50,9 @@ public class Response {
         headers.header("Date", new Date().toString());
         headers.header("Server", "Cobra v0.1");
         headers.header("Connection", "close");
-        if (body != null)
+        if (body != null) {
             headers.header("Content-Length", Integer.toString(body.bytes().length));
+        }
     }
 
     public Status status() {
@@ -74,7 +75,7 @@ public class Response {
         return headers;
     }
 
-    public HashMap<String, String> headersMap() {
+    public Map<String, String> headersMap() {
 
         return headers.headers();
     }

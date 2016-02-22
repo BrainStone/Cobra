@@ -25,12 +25,17 @@ import de.jackwhite20.cobra.server.impl.CobraServerImpl;
 /**
  * Created by JackWhite20 on 30.01.2016.
  */
-public class CobraServerFactory {
+public final class CobraServerFactory {
+
+    private CobraServerFactory() {
+        // Do not allow instance creation
+    }
 
     public static CobraServer create(CobraConfig cobraConfig) {
 
-        if (cobraConfig == null)
+        if (cobraConfig == null) {
             throw new IllegalArgumentException("cobraConfig cannot be null");
+        }
 
         return new CobraServerImpl(cobraConfig);
     }
