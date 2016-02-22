@@ -21,9 +21,7 @@ package de.jackwhite20.cobra.shared.util;
 
 import de.jackwhite20.cobra.shared.http.Headers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
@@ -54,25 +52,16 @@ public final class URLUtil {
 
     public static byte[] readResponse(HttpURLConnection connection) throws IOException {
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        InputStream inputStream = null;
-        try {
-            inputStream = connection.getInputStream();
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); InputStream inputStream = connection.getInputStream()) {
             byte[] chunk = new byte[CHUNK_SIZE];
 
             int i;
             while ((i = inputStream.read(chunk)) > 0) {
                 byteArrayOutputStream.write(chunk, 0, i);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
 
-        return byteArrayOutputStream.toByteArray();
+            return byteArrayOutputStream.toByteArray();
+        }
     }
 
     public static HttpURLConnection connection(URL url, Proxy proxy, int connectTimeout, Headers headers, String method) throws IOException {
