@@ -37,11 +37,15 @@ import java.net.URL;
  */
 public class CobraClientImpl implements CobraClient {
 
+    private static final int DEFAULT_TIMEOUT = 2000;
+
+    private static final int CONTENT_DISPOSITION_FILENAME_LENGTH = 10;
+
     private int connectTimeout;
 
     public CobraClientImpl() {
 
-        this(2000);
+        this(DEFAULT_TIMEOUT);
     }
 
     public CobraClientImpl(int connectTimeout) {
@@ -127,18 +131,20 @@ public class CobraClientImpl implements CobraClient {
 
         String disposition = connection.getHeaderField("Content-Disposition");
 
-        if (disposition == null)
+        if (disposition == null) {
             throw new IllegalArgumentException("no 'Content-Disposition' header present");
+        }
 
         String fileName = null;
 
         int index = disposition.indexOf("filename=");
         if (index > 0) {
-            fileName = disposition.substring(index + 10, disposition.length() - 1);
+            fileName = disposition.substring(index + CONTENT_DISPOSITION_FILENAME_LENGTH, disposition.length() - 1);
         }
 
-        if (fileName == null)
+        if (fileName == null) {
             throw new IllegalStateException("unable to get the file name from the disposition header: " + disposition);
+        }
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(folderToSaveTo + File.separator + fileName); InputStream inputStream = connection.getInputStream()) {
             byte[] chunk = new byte[URLUtil.CHUNK_SIZE];

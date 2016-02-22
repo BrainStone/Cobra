@@ -56,7 +56,7 @@ public class Request {
         location = tokenizer.nextToken();
         // Remove last slash
         if (location.endsWith("/")) {
-            location = location.substring(0, location.lastIndexOf("/"));
+            location = location.substring(0, location.lastIndexOf('/'));
         }
         version = tokenizer.nextToken();
 
@@ -64,8 +64,9 @@ public class Request {
         for (int i = 1; i < lines.length; i++) {
             String[] keyVal = lines[i].split(":", 2);
 
-            if (keyVal.length == 2)
+            if (keyVal.length == 2) {
                 headers.put(keyVal[0].trim(), keyVal[1].trim());
+            }
         }
     }
 
@@ -94,8 +95,9 @@ public class Request {
         String[] splitted = data.split("&");
         for (String aSplitted : splitted) {
             String[] keyVal = aSplitted.split("=");
-            if (keyVal.length == 2)
+            if (keyVal.length == 2) {
                 postData.put(keyVal[0], keyVal[1]);
+            }
         }
     }
 

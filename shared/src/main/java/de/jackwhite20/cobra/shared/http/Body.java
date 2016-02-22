@@ -38,7 +38,7 @@ public class Body {
 
     public byte[] bytes() {
 
-        return bytes;
+        return bytes.clone();
     }
 
     public String content() {

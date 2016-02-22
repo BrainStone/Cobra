@@ -25,7 +25,11 @@ import de.jackwhite20.cobra.client.impl.CobraClientImpl;
 /**
  * Created by JackWhite20 on 17.02.2016.
  */
-public class CobraClientFactory {
+public final class CobraClientFactory {
+
+    private CobraClientFactory() {
+        // Do not allow instance creation
+    }
 
     public static CobraClient create() {
 

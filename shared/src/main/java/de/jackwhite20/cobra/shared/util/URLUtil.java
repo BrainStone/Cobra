@@ -33,9 +33,13 @@ import java.util.Map;
 /**
  * Created by JackWhite20 on 17.02.2016.
  */
-public class URLUtil {
+public final class URLUtil {
 
     public static final int CHUNK_SIZE = 2048;
+
+    private URLUtil() {
+        // Do not allow instance creation
+    }
 
     public static Headers filterHeaders(Map<String, List<String>> headers) {
 
@@ -63,8 +67,9 @@ public class URLUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (inputStream != null)
+            if (inputStream != null) {
                 inputStream.close();
+            }
         }
 
         return byteArrayOutputStream.toByteArray();
@@ -72,8 +77,9 @@ public class URLUtil {
 
     public static HttpURLConnection connection(URL url, Proxy proxy, int connectTimeout, Headers headers, String method) throws IOException {
 
-        if (proxy == null)
+        if (proxy == null) {
             proxy = Proxy.NO_PROXY;
+        }
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
         connection.setConnectTimeout(connectTimeout);

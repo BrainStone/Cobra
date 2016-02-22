@@ -40,7 +40,7 @@ public class ResourceInfo {
 
     private String rootPath;
 
-    private HashMap<String, Entry> methods = new HashMap<>();
+    private Map<String, Entry> methods = new HashMap<>();
 
     public ResourceInfo(Object object, String rootPath) {
 
@@ -52,8 +52,9 @@ public class ResourceInfo {
 
         // Search the right entry from the path requested because the path can have path parameters
         for (Map.Entry<String, Entry> entry : methods.entrySet()) {
-            if (path.startsWith(entry.getKey()))
+            if (path.startsWith(entry.getKey())) {
                 return process(entry.getKey(), entry.getValue(), httpRequest);
+            }
         }
 
         return process("", null, null);
@@ -62,11 +63,13 @@ public class ResourceInfo {
     private Response process(String mainPath, Entry entry, Request httpRequest) {
 
         if (entry != null) {
-            if (!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type")))
+            if (!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type"))) {
                 return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
+            }
 
-            if (!entry.requestMethod.equals(httpRequest.method()))
+            if (!entry.requestMethod.equals(httpRequest.method())) {
                 return Response.status(Status.METHOD_NOT_ALLOWED).build();
+            }
 
             try {
                 // TODO: Better implementation
