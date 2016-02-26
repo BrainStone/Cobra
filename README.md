@@ -38,6 +38,14 @@ _Server:_
     <version>0.1-SNAPSHOT</version>
 </dependency>
 ```
+_If you want to use some of the shared code:_
+```xml
+<dependency>
+    <groupId>de.jackwhite20</groupId>
+    <artifactId>cobra-shared</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
 
 # Quick start
 
