@@ -29,6 +29,15 @@ public class Headers {
 
     private Map<String, String> headers = new HashMap<>();
 
+    public Headers() {
+
+    }
+
+    public Headers(String name, String value) {
+
+        header(name, value);
+    }
+
     public Headers header(String name, String value) {
 
         headers.put(name, value);
@@ -44,5 +53,10 @@ public class Headers {
     public static Headers empty() {
 
         return new Headers();
+    }
+
+    public static Headers from(String name, String value) {
+
+        return new Headers(name, value);
     }
 }
