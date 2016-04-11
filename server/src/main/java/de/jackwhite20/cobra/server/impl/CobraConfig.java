@@ -44,6 +44,10 @@ public abstract class CobraConfig {
 
     protected int backLog;
 
+    protected int corePoolSize = 2;
+
+    protected int maxPoolSize = 2;
+
     protected final List<Class<?>> classes = new ArrayList<>();
 
     protected final List<Class<? extends RequestFilter>> filters = new ArrayList<>();
@@ -67,6 +71,24 @@ public abstract class CobraConfig {
     public void backLog(int backLog) {
 
         this.backLog = backLog;
+    }
+
+    public void corePoolSize(int corePoolSize) {
+
+        if(corePoolSize < 2) {
+            throw new IllegalArgumentException("corePoolSize need to be at least 2");
+        }
+
+        this.corePoolSize = corePoolSize;
+    }
+
+    public void maxPoolSize(int maxPoolSize) {
+
+        if(maxPoolSize < 2) {
+            throw new IllegalArgumentException("maxPoolSize need to be at least 2");
+        }
+
+        this.maxPoolSize = maxPoolSize;
     }
 
     public void filter(Class<? extends RequestFilter> filter) {

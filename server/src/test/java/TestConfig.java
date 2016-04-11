@@ -11,6 +11,9 @@ public class TestConfig extends CobraConfig {
         port(8080);
         backLog(25);
 
+        corePoolSize(8);
+        maxPoolSize(16);
+
         filter(TestFilter.class);
 
         //register(TestResource.class);
