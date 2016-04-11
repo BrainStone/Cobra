@@ -143,7 +143,12 @@ public class ExampleCobraServer {
             host("0.0.0.0");
             // Set the port to listen on
             port(8080);
-
+			
+            // Set the core size of the underlying thread pool executor
+        	corePoolSize(8);
+            // Set the maximum size of the underlying thread pool executor
+        	maxPoolSize(16);
+            
 			// Register our example resource
             register(ExampleResource.class);
             
