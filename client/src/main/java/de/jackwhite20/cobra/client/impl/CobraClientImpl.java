@@ -81,6 +81,20 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public Response post(URL url, Object object, Headers headers) throws IOException {
+
+        return post(url, null, object, headers);
+    }
+
+    @Override
+    public Response post(URL url, Proxy proxy, Object object, Headers headers) throws IOException {
+
+        Preconditions.checkNotNull(object, "object cannot be null");
+
+        return post(url, proxy, Body.of(gson.toJson(object)), headers);
+    }
+
+    @Override
     public Response put(URL url, Headers headers) throws IOException {
 
         return put(url, null, headers);
