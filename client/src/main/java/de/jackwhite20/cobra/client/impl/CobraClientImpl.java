@@ -20,6 +20,7 @@
 package de.jackwhite20.cobra.client.impl;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 import de.jackwhite20.cobra.client.CobraClient;
 import de.jackwhite20.cobra.shared.Status;
 import de.jackwhite20.cobra.shared.http.Body;
@@ -42,6 +43,8 @@ public class CobraClientImpl implements CobraClient {
     private static final int CONTENT_DISPOSITION_FILENAME_LENGTH = 10;
 
     private int connectTimeout;
+
+    private Gson gson = new Gson();
 
     public CobraClientImpl() {
 
@@ -114,6 +117,20 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public <T> T get(URL url, Proxy proxy, Headers headers, Class<T> clazz) throws IOException {
+
+        Response response = request(url, proxy, headers, "GET");
+
+        return gson.fromJson(response.body().content(), clazz);
+    }
+
+    @Override
+    public <T> T get(URL url, Headers headers, Class<T> clazz) throws IOException {
+
+        return get(url, null, headers, clazz);
+    }
+
+    @Override
     public Response download(URL url, Headers headers, String folderToSaveTo) throws IOException {
 
         return download(url, null, headers, folderToSaveTo);
@@ -170,8 +187,15 @@ public class CobraClientImpl implements CobraClient {
         return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
     }
 
+    @Override
     public int connectTimeout() {
 
         return connectTimeout;
+    }
+
+    @Override
+    public Gson gson() {
+
+        return gson;
     }
 }

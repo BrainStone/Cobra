@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.client;
 
+import com.google.gson.Gson;
 import de.jackwhite20.cobra.shared.http.Body;
 import de.jackwhite20.cobra.shared.http.Headers;
 import de.jackwhite20.cobra.shared.http.Response;
@@ -48,7 +49,15 @@ public interface CobraClient {
 
     Response get(URL url, Headers headers) throws IOException;
 
+    <T> T get(URL url, Proxy proxy, Headers headers, Class<T> clazz) throws IOException;
+
+    <T> T get(URL url, Headers headers, Class<T> clazz) throws IOException;
+
     Response download(URL url, Headers headers, String folderToSaveTo) throws IOException;
 
     Response download(URL url, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException;
+
+    int connectTimeout();
+
+    Gson gson();
 }
