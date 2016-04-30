@@ -107,6 +107,28 @@ Response response = client.download(new URL("http://somesite.net:8080/some/downl
 System.out.println("Status: " + response.status());
 ```
 
+_JSON serialization:_
+```java
+// Imagine that we will get a response like this
+/*
+{
+  "userId": 1,
+  "id": 1,
+  "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+  "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum"
+}
+*/
+try {
+    CobraClient client = CobraClientFactory.create();
+    
+    // The 'User' class is a simple class with 4 fields (userId, id, title and body)
+    // The body content will get automatically serialized from json to an instance of the given class
+    User user = client.get(new URL("http://somesite.net:8080/some/path/"), Headers.empty(), User.class);
+} catch (Exception e) {
+	e.printStackTrace();
+}
+```
+
 ### Server
 _Example RESTful server:_
 ```java
