@@ -22,6 +22,7 @@ package de.jackwhite20.cobra.client.impl;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import de.jackwhite20.cobra.client.CobraClient;
+import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
 import de.jackwhite20.cobra.shared.http.Body;
 import de.jackwhite20.cobra.shared.http.Headers;
@@ -82,7 +83,7 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(body, "body cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
 
-        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "POST");
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, RequestMethod.POST);
 
         try (DataOutputStream writer = new DataOutputStream(connection.getOutputStream())) {
             writer.write(body.bytes());
@@ -140,7 +141,7 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response put(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        return request(url, proxy, headers, "PUT");
+        return request(url, proxy, headers, RequestMethod.PUT);
     }
 
     @Override
@@ -164,7 +165,7 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response delete(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        return request(url, proxy, headers, "DELETE");
+        return request(url, proxy, headers, RequestMethod.DELETE);
     }
 
     @Override
@@ -188,7 +189,7 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response get(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        return request(url, proxy, headers, "GET");
+        return request(url, proxy, headers, RequestMethod.GET);
     }
 
     @Override
@@ -206,7 +207,7 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public <T> T get(URL url, Proxy proxy, Headers headers, Class<T> clazz) throws IOException {
 
-        Response response = request(url, proxy, headers, "GET");
+        Response response = request(url, proxy, headers, RequestMethod.GET);
 
         return gson.fromJson(response.body().content(), clazz);
     }
@@ -243,7 +244,7 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(folderToSaveTo, "folderToSaveTo cannot be null");
         Preconditions.checkArgument(!folderToSaveTo.isEmpty(), "folderToSaveTo cannot be empty");
 
-        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "GET");
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, RequestMethod.GET);
 
         String disposition = connection.getHeaderField("Content-Disposition");
 
@@ -286,7 +287,7 @@ public class CobraClientImpl implements CobraClient {
         return download(buildPath(relativePath), proxy, headers, folderToSaveTo);
     }
 
-    private Response request(URL url, Proxy proxy, Headers headers, String method) throws IOException {
+    private Response request(URL url, Proxy proxy, Headers headers, RequestMethod method) throws IOException {
 
         Preconditions.checkNotNull(url, "url cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
