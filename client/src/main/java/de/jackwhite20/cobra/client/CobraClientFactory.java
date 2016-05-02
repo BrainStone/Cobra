@@ -42,4 +42,11 @@ public final class CobraClientFactory {
 
         return new CobraClientImpl(connectTimeout);
     }
+
+    public static CobraClient create(String baseUrl) {
+
+        Preconditions.checkArgument(baseUrl != null && !baseUrl.isEmpty(), "baseUrl cannot be null or empty");
+
+        return new CobraClientImpl(baseUrl);
+    }
 }

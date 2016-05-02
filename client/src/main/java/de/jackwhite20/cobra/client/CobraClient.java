@@ -35,31 +35,59 @@ public interface CobraClient {
 
     Response post(URL url, Body body, Headers headers) throws IOException;
 
+    Response post(String relativePath, Body body, Headers headers) throws IOException;
+
     Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException;
+
+    Response post(String relativePath, Proxy proxy, Body body, Headers headers) throws IOException;
 
     Response post(URL url, Object body, Headers headers) throws IOException;
 
+    Response post(String relativePath, Object body, Headers headers) throws IOException;
+
     Response post(URL url, Proxy proxy, Object body, Headers headers) throws IOException;
+
+    Response post(String relativePath, Proxy proxy, Object body, Headers headers) throws IOException;
 
     Response put(URL url, Headers headers) throws IOException;
 
+    Response put(String relativePath, Headers headers) throws IOException;
+
     Response put(URL url, Proxy proxy, Headers headers) throws IOException;
+
+    Response put(String relativePath, Proxy proxy, Headers headers) throws IOException;
 
     Response delete(URL url, Headers headers) throws IOException;
 
+    Response delete(String relativePath, Headers headers) throws IOException;
+
     Response delete(URL url, Proxy proxy, Headers headers) throws IOException;
+
+    Response delete(String relativePath, Proxy proxy, Headers headers) throws IOException;
 
     Response get(URL url, Proxy proxy, Headers headers) throws IOException;
 
+    Response get(String relativePath, Proxy proxy, Headers headers) throws IOException;
+
     Response get(URL url, Headers headers) throws IOException;
+
+    Response get(String relativePath, Headers headers) throws IOException;
 
     <T> T get(URL url, Proxy proxy, Headers headers, Class<T> clazz) throws IOException;
 
+    <T> T get(String relativePath, Proxy proxy, Headers headers, Class<T> clazz) throws IOException;
+
     <T> T get(URL url, Headers headers, Class<T> clazz) throws IOException;
+
+    <T> T get(String relativePath, Headers headers, Class<T> clazz) throws IOException;
 
     Response download(URL url, Headers headers, String folderToSaveTo) throws IOException;
 
+    Response download(String relativePath, Headers headers, String folderToSaveTo) throws IOException;
+
     Response download(URL url, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException;
+
+    Response download(String relativePath, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException;
 
     int connectTimeout();
 

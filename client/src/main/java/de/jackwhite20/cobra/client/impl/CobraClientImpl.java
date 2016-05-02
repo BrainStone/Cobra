@@ -46,14 +46,27 @@ public class CobraClientImpl implements CobraClient {
 
     private Gson gson = new Gson();
 
+    private String baseUrl;
+
     public CobraClientImpl() {
 
-        this(DEFAULT_TIMEOUT);
+        this(DEFAULT_TIMEOUT, "");
+    }
+
+    public CobraClientImpl(String baseUrl) {
+
+        this(DEFAULT_TIMEOUT, baseUrl);
     }
 
     public CobraClientImpl(int connectTimeout) {
 
+        this(connectTimeout, "");
+    }
+
+    public CobraClientImpl(int connectTimeout, String baseUrl) {
+
         this.connectTimeout = connectTimeout;
+        this.baseUrl = baseUrl;
     }
 
     @Override
@@ -95,6 +108,30 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public Response post(String relativePath, Body body, Headers headers) throws IOException {
+
+        return post(relativePath, null, body, headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Proxy proxy, Body body, Headers headers) throws IOException {
+
+        return post(buildPath(relativePath), proxy, body, headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Object body, Headers headers) throws IOException {
+
+        return post(relativePath, null, body, headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Proxy proxy, Object body, Headers headers) throws IOException {
+
+        return post(buildPath(relativePath), proxy, body, headers);
+    }
+
+    @Override
     public Response put(URL url, Headers headers) throws IOException {
 
         return put(url, null, headers);
@@ -104,6 +141,18 @@ public class CobraClientImpl implements CobraClient {
     public Response put(URL url, Proxy proxy, Headers headers) throws IOException {
 
         return request(url, proxy, headers, "PUT");
+    }
+
+    @Override
+    public Response put(String relativePath, Headers headers) throws IOException {
+
+        return put(relativePath, null, headers);
+    }
+
+    @Override
+    public Response put(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return put(buildPath(relativePath), proxy, headers);
     }
 
     @Override
@@ -119,6 +168,18 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public Response delete(String relativePath, Headers headers) throws IOException {
+
+        return delete(relativePath, null, headers);
+    }
+
+    @Override
+    public Response delete(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return delete(buildPath(relativePath), proxy, headers);
+    }
+
+    @Override
     public Response get(URL url, Headers headers) throws IOException {
 
         return get(url, null, headers);
@@ -128,6 +189,18 @@ public class CobraClientImpl implements CobraClient {
     public Response get(URL url, Proxy proxy, Headers headers) throws IOException {
 
         return request(url, proxy, headers, "GET");
+    }
+
+    @Override
+    public Response get(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return get(buildPath(relativePath), proxy, headers);
+    }
+
+    @Override
+    public Response get(String relativePath, Headers headers) throws IOException {
+
+        return get(relativePath, null, headers);
     }
 
     @Override
@@ -142,6 +215,18 @@ public class CobraClientImpl implements CobraClient {
     public <T> T get(URL url, Headers headers, Class<T> clazz) throws IOException {
 
         return get(url, null, headers, clazz);
+    }
+
+    @Override
+    public <T> T get(String relativePath, Proxy proxy, Headers headers, Class<T> clazz) throws IOException {
+
+        return get(buildPath(relativePath), proxy, headers, clazz);
+    }
+
+    @Override
+    public <T> T get(String relativePath, Headers headers, Class<T> clazz) throws IOException {
+
+        return get(relativePath, null, headers, clazz);
     }
 
     @Override
@@ -189,6 +274,18 @@ public class CobraClientImpl implements CobraClient {
         return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of("".getBytes()));
     }
 
+    @Override
+    public Response download(String relativePath, Headers headers, String folderToSaveTo) throws IOException {
+
+        return download(relativePath, null, headers, folderToSaveTo);
+    }
+
+    @Override
+    public Response download(String relativePath, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException {
+
+        return download(buildPath(relativePath), proxy, headers, folderToSaveTo);
+    }
+
     private Response request(URL url, Proxy proxy, Headers headers, String method) throws IOException {
 
         Preconditions.checkNotNull(url, "url cannot be null");
@@ -199,6 +296,11 @@ public class CobraClientImpl implements CobraClient {
         byte[] response = URLUtil.readResponse(connection);
 
         return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
+    }
+
+    private URL buildPath(String relativePath) throws IOException {
+
+        return new URL(baseUrl + relativePath);
     }
 
     @Override
