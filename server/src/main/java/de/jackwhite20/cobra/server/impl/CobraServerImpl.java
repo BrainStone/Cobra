@@ -45,8 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * Created by JackWhite20 on 30.01.2016.
@@ -59,7 +58,7 @@ public class CobraServerImpl implements CobraServer {
 
     private ServerSocket serverSocket;
 
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private ExecutorService executorService;
 
     private HashMap<String, ResourceInfo> resourceInfo = new HashMap<>();
 
@@ -72,6 +71,8 @@ public class CobraServerImpl implements CobraServer {
     public CobraServerImpl(CobraConfig cobraConfig) {
 
         this.cobraConfig = cobraConfig;
+        this.executorService = new ThreadPoolExecutor(cobraConfig.corePoolSize, cobraConfig.maxPoolSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+
         initConfig();
     }
 

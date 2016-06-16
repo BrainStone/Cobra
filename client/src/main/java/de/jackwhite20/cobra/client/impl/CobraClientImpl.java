@@ -20,7 +20,9 @@
 package de.jackwhite20.cobra.client.impl;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 import de.jackwhite20.cobra.client.CobraClient;
+import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.Status;
 import de.jackwhite20.cobra.shared.http.Body;
 import de.jackwhite20.cobra.shared.http.Headers;
@@ -43,14 +45,29 @@ public class CobraClientImpl implements CobraClient {
 
     private int connectTimeout;
 
+    private Gson gson = new Gson();
+
+    private String baseUrl;
+
     public CobraClientImpl() {
 
-        this(DEFAULT_TIMEOUT);
+        this(DEFAULT_TIMEOUT, "");
+    }
+
+    public CobraClientImpl(String baseUrl) {
+
+        this(DEFAULT_TIMEOUT, baseUrl);
     }
 
     public CobraClientImpl(int connectTimeout) {
 
+        this(connectTimeout, "");
+    }
+
+    public CobraClientImpl(int connectTimeout, String baseUrl) {
+
         this.connectTimeout = connectTimeout;
+        this.baseUrl = baseUrl;
     }
 
     @Override
@@ -66,7 +83,7 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(body, "body cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
 
-        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "POST");
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, RequestMethod.POST);
 
         try (DataOutputStream writer = new DataOutputStream(connection.getOutputStream())) {
             writer.write(body.bytes());
@@ -78,6 +95,44 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public Response post(URL url, Object object, Headers headers) throws IOException {
+
+        return post(url, null, object, headers);
+    }
+
+    @Override
+    public Response post(URL url, Proxy proxy, Object object, Headers headers) throws IOException {
+
+        Preconditions.checkNotNull(object, "object cannot be null");
+
+        return post(url, proxy, Body.of(gson.toJson(object)), headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Body body, Headers headers) throws IOException {
+
+        return post(relativePath, null, body, headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Proxy proxy, Body body, Headers headers) throws IOException {
+
+        return post(buildPath(relativePath), proxy, body, headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Object body, Headers headers) throws IOException {
+
+        return post(relativePath, null, body, headers);
+    }
+
+    @Override
+    public Response post(String relativePath, Proxy proxy, Object body, Headers headers) throws IOException {
+
+        return post(buildPath(relativePath), proxy, body, headers);
+    }
+
+    @Override
     public Response put(URL url, Headers headers) throws IOException {
 
         return put(url, null, headers);
@@ -86,7 +141,19 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response put(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        return request(url, proxy, headers, "PUT");
+        return request(url, proxy, headers, RequestMethod.PUT);
+    }
+
+    @Override
+    public Response put(String relativePath, Headers headers) throws IOException {
+
+        return put(relativePath, null, headers);
+    }
+
+    @Override
+    public Response put(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return put(buildPath(relativePath), proxy, headers);
     }
 
     @Override
@@ -98,7 +165,19 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response delete(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        return request(url, proxy, headers, "DELETE");
+        return request(url, proxy, headers, RequestMethod.DELETE);
+    }
+
+    @Override
+    public Response delete(String relativePath, Headers headers) throws IOException {
+
+        return delete(relativePath, null, headers);
+    }
+
+    @Override
+    public Response delete(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return delete(buildPath(relativePath), proxy, headers);
     }
 
     @Override
@@ -110,7 +189,45 @@ public class CobraClientImpl implements CobraClient {
     @Override
     public Response get(URL url, Proxy proxy, Headers headers) throws IOException {
 
-        return request(url, proxy, headers, "GET");
+        return request(url, proxy, headers, RequestMethod.GET);
+    }
+
+    @Override
+    public Response get(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return get(buildPath(relativePath), proxy, headers);
+    }
+
+    @Override
+    public Response get(String relativePath, Headers headers) throws IOException {
+
+        return get(relativePath, null, headers);
+    }
+
+    @Override
+    public <T> T get(URL url, Proxy proxy, Headers headers, Class<T> clazz) throws IOException {
+
+        Response response = request(url, proxy, headers, RequestMethod.GET);
+
+        return gson.fromJson(response.body().content(), clazz);
+    }
+
+    @Override
+    public <T> T get(URL url, Headers headers, Class<T> clazz) throws IOException {
+
+        return get(url, null, headers, clazz);
+    }
+
+    @Override
+    public <T> T get(String relativePath, Proxy proxy, Headers headers, Class<T> clazz) throws IOException {
+
+        return get(buildPath(relativePath), proxy, headers, clazz);
+    }
+
+    @Override
+    public <T> T get(String relativePath, Headers headers, Class<T> clazz) throws IOException {
+
+        return get(relativePath, null, headers, clazz);
     }
 
     @Override
@@ -127,7 +244,7 @@ public class CobraClientImpl implements CobraClient {
         Preconditions.checkNotNull(folderToSaveTo, "folderToSaveTo cannot be null");
         Preconditions.checkArgument(!folderToSaveTo.isEmpty(), "folderToSaveTo cannot be empty");
 
-        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, "GET");
+        HttpURLConnection connection = URLUtil.connection(url, proxy, connectTimeout, headers, RequestMethod.GET);
 
         String disposition = connection.getHeaderField("Content-Disposition");
 
@@ -158,7 +275,19 @@ public class CobraClientImpl implements CobraClient {
         return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of("".getBytes()));
     }
 
-    private Response request(URL url, Proxy proxy, Headers headers, String method) throws IOException {
+    @Override
+    public Response download(String relativePath, Headers headers, String folderToSaveTo) throws IOException {
+
+        return download(relativePath, null, headers, folderToSaveTo);
+    }
+
+    @Override
+    public Response download(String relativePath, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException {
+
+        return download(buildPath(relativePath), proxy, headers, folderToSaveTo);
+    }
+
+    private Response request(URL url, Proxy proxy, Headers headers, RequestMethod method) throws IOException {
 
         Preconditions.checkNotNull(url, "url cannot be null");
         Preconditions.checkNotNull(headers, "headers cannot be null");
@@ -170,8 +299,20 @@ public class CobraClientImpl implements CobraClient {
         return new Response(Status.valueOf(connection.getResponseCode()), URLUtil.filterHeaders(connection.getHeaderFields()), Body.of(response));
     }
 
+    private URL buildPath(String relativePath) throws IOException {
+
+        return new URL(baseUrl + relativePath);
+    }
+
+    @Override
     public int connectTimeout() {
 
         return connectTimeout;
+    }
+
+    @Override
+    public Gson gson() {
+
+        return gson;
     }
 }

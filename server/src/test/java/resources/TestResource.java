@@ -74,7 +74,7 @@ public class TestResource {
     public Response bye(Request httpRequest, @PathParam String name, @PathParam String name2) {
 
 
-        return Response.ok().content("<H1>Hello " + name + " " + name2 + "!</H1>").build();
+        return Response.ok().content("<H1>Bye " + name + " " + name2 + "!</H1>").build();
     }
 
     @GET

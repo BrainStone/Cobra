@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.shared.util;
 
+import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.http.Headers;
 
 import java.io.*;
@@ -64,7 +65,7 @@ public final class URLUtil {
         }
     }
 
-    public static HttpURLConnection connection(URL url, Proxy proxy, int connectTimeout, Headers headers, String method) throws IOException {
+    public static HttpURLConnection connection(URL url, Proxy proxy, int connectTimeout, Headers headers, RequestMethod method) throws IOException {
 
         if (proxy == null) {
             proxy = Proxy.NO_PROXY;
@@ -72,8 +73,8 @@ public final class URLUtil {
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
         connection.setConnectTimeout(connectTimeout);
-        connection.setRequestMethod(method);
-        connection.setRequestProperty("User-Agent", "Cobra v0.1");
+        connection.setRequestMethod(method.name());
+        connection.setRequestProperty("User-Agent", "Cobra v2.0.0");
 
         for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
