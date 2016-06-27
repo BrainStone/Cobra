@@ -247,8 +247,10 @@ public class CobraServerImpl implements CobraServer {
                 }
             }
 
-            // Stop the server
-            stop();
+            // Stop the server if it's still running
+            if (running) {
+                stop();
+            }
         }
     }
 }
