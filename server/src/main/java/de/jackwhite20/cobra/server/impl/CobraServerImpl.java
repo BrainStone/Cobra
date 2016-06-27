@@ -101,19 +101,21 @@ public class CobraServerImpl implements CobraServer {
             e.printStackTrace();
         }
 
-        if (resourceInfo == null)
+        if (resourceInfo == null) {
             return;
+        }
 
         for (Method method : clazz.getMethods()) {
             if (method.isAnnotationPresent(Path.class)/* && method.getParameterCount() == 1*/) {
                 if (method.getParameterTypes()[0].isAssignableFrom(Request.class)) {
                     RequestMethod requestMethod = RequestMethod.GET;
-                    if (method.isAnnotationPresent(POST.class))
+                    if (method.isAnnotationPresent(POST.class)) {
                         requestMethod = RequestMethod.POST;
-                    else if (method.isAnnotationPresent(DELETE.class))
+                    } else if (method.isAnnotationPresent(DELETE.class)) {
                         requestMethod = RequestMethod.DELETE;
-                    else if (method.isAnnotationPresent(PUT.class))
+                    } else if (method.isAnnotationPresent(PUT.class)) {
                         requestMethod = RequestMethod.PUT;
+                    }
 
                     ResourceInfo.Entry resEntry;
 
@@ -121,8 +123,9 @@ public class CobraServerImpl implements CobraServer {
                     String copyPath = path;
 
                     // If path parameters are present, remove them to get the root path
-                    if (path.contains("{"))
+                    if (path.contains("{")) {
                         path = path.substring(0, path.indexOf("{") - 1);
+                    }
 
                     resourceInfo.add(path, (method.isAnnotationPresent(Produces.class)) ? resEntry = new ResourceInfo.Entry(method, method.getAnnotation(Produces.class).value().type(), (method.isAnnotationPresent(Consumes.class)) ? method.getAnnotation(Consumes.class).value().type() : ContentType.ALL.type(), requestMethod) : (resEntry = new ResourceInfo.Entry(method, requestMethod)));
 
@@ -149,8 +152,9 @@ public class CobraServerImpl implements CobraServer {
                     }
 
                     if (rawParams.size() > 0) {
-                        if (rawParams.size() != method.getParameterCount() - 1)
+                        if (rawParams.size() != method.getParameterCount() - 1) {
                             throw new IllegalArgumentException("the path parameter count is not equal with the method parameter count of method " + method.getName());
+                        }
 
                         rawParams.forEach(resEntry::addPathKey);
                     }
@@ -164,8 +168,13 @@ public class CobraServerImpl implements CobraServer {
     @Override
     public void start() {
 
-        if (running)
+        if (running) {
             throw new IllegalStateException("server is already running");
+        }
+
+        if (cobraConfig == null) {
+            throw new IllegalStateException("config cannot be null");
+        }
 
         try {
             serverSocket = new ServerSocket(cobraConfig.port, cobraConfig.backLog, InetAddress.getByName(cobraConfig.host));
@@ -181,16 +190,17 @@ public class CobraServerImpl implements CobraServer {
     @Override
     public void stop() {
 
-        if (!running)
+        if (!running) {
             throw new IllegalStateException("server is already stopped");
+        }
 
         running = false;
 
         if (serverSocket != null) {
             try {
                 serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignore) {
+
             }
         }
 
@@ -201,6 +211,7 @@ public class CobraServerImpl implements CobraServer {
     public void config(CobraConfig cobraConfig) {
 
         this.cobraConfig = cobraConfig;
+
         initConfig();
     }
 
@@ -223,11 +234,6 @@ public class CobraServerImpl implements CobraServer {
         return Response.status(Status.NOT_FOUND).build();
     }
 
-    public boolean isRunning() {
-
-        return running;
-    }
-
     private class CobraServerThread implements Runnable {
 
         @Override
@@ -236,10 +242,13 @@ public class CobraServerImpl implements CobraServer {
             while (running) {
                 try {
                     executorService.execute(new ConnectionHandler(serverSocket.accept(), CobraServerImpl.this));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignore) {
+                    break;
                 }
             }
+
+            // Stop the server
+            stop();
         }
     }
 }
