@@ -27,7 +27,7 @@ _Client:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-client</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
 </dependency>
 ```
 _Server:_
@@ -35,7 +35,7 @@ _Server:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-server</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
 </dependency>
 ```
 _If you want to use some of the shared code:_
@@ -43,7 +43,7 @@ _If you want to use some of the shared code:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-shared</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
 </dependency>
 ```
 
