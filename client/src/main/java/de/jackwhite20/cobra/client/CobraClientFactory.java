@@ -38,14 +38,15 @@ public final class CobraClientFactory {
 
     public static CobraClient create(int connectTimeout) {
 
-        Preconditions.checkArgument(connectTimeout < 0, "connectTimeout cannot be negative");
+        Preconditions.checkArgument(connectTimeout > 0, "connectTimeout cannot be negative");
 
         return new CobraClientImpl(connectTimeout);
     }
 
     public static CobraClient create(String baseUrl) {
 
-        Preconditions.checkArgument(baseUrl != null && !baseUrl.isEmpty(), "baseUrl cannot be null or empty");
+        Preconditions.checkArgument(baseUrl != null, "baseUrl cannot be null");
+        Preconditions.checkArgument(!baseUrl.isEmpty(), "baseUrl cannot be empty");
 
         return new CobraClientImpl(baseUrl);
     }
