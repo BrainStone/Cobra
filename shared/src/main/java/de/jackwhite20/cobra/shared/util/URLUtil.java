@@ -53,7 +53,9 @@ public final class URLUtil {
 
     public static byte[] readResponse(HttpURLConnection connection) throws IOException {
 
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); InputStream inputStream = connection.getInputStream()) {
+        boolean error = connection.getResponseCode() >= 400;
+
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); InputStream inputStream = (!error) ? connection.getInputStream() : connection.getErrorStream()) {
             byte[] chunk = new byte[CHUNK_SIZE];
 
             int i;
