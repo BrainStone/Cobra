@@ -157,6 +157,30 @@ public class CobraClientImpl implements CobraClient {
     }
 
     @Override
+    public Response patch(URL url, Headers headers) throws IOException {
+
+        return patch(url, null, headers);
+    }
+
+    @Override
+    public Response patch(String relativePath, Headers headers) throws IOException {
+
+        return patch(relativePath, null, headers);
+    }
+
+    @Override
+    public Response patch(URL url, Proxy proxy, Headers headers) throws IOException {
+
+        return request(url, proxy, headers, RequestMethod.PATCH);
+    }
+
+    @Override
+    public Response patch(String relativePath, Proxy proxy, Headers headers) throws IOException {
+
+        return patch(buildPath(relativePath), proxy, headers);
+    }
+
+    @Override
     public Response delete(URL url, Headers headers) throws IOException {
 
         return delete(url, null, headers);

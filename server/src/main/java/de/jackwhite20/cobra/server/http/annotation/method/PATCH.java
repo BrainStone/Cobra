@@ -17,16 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jackwhite20.cobra.shared;
+package de.jackwhite20.cobra.server.http.annotation.method;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Created by JackWhite20 on 30.01.2016.
+ * Created by JackWhite20 on 03.09.2016.
  */
-public enum RequestMethod {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PATCH {
 
-    GET,
-    POST,
-    PUT,
-    DELETE,
-    PATCH
 }
