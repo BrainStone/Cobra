@@ -72,7 +72,7 @@ public class CobraServerImpl implements CobraServer {
     public CobraServerImpl(CobraConfig cobraConfig) {
 
         this.cobraConfig = cobraConfig;
-        this.executorService = new ThreadPoolExecutor(cobraConfig.corePoolSize, cobraConfig.maxPoolSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        this.executorService = new ThreadPoolExecutor(cobraConfig.corePoolSize, cobraConfig.maxPoolSize, cobraConfig.threadPoolTimeout, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
         initConfig();
     }

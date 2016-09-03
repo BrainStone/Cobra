@@ -48,6 +48,8 @@ public abstract class CobraConfig {
 
     protected int maxPoolSize = 2;
 
+    protected int threadPoolTimeout = 60;
+
     protected final List<Class<?>> classes = new ArrayList<>();
 
     protected final List<Class<? extends RequestFilter>> filters = new ArrayList<>();
@@ -76,7 +78,7 @@ public abstract class CobraConfig {
     public void corePoolSize(int corePoolSize) {
 
         if(corePoolSize < 2) {
-            throw new IllegalArgumentException("corePoolSize need to be at least 2");
+            throw new IllegalArgumentException("corePoolSize needs to be at least 2");
         }
 
         this.corePoolSize = corePoolSize;
@@ -85,30 +87,43 @@ public abstract class CobraConfig {
     public void maxPoolSize(int maxPoolSize) {
 
         if(maxPoolSize < 2) {
-            throw new IllegalArgumentException("maxPoolSize need to be at least 2");
+            throw new IllegalArgumentException("maxPoolSize needs to be at least 2");
         }
 
         this.maxPoolSize = maxPoolSize;
     }
 
+    public void threadPoolTimeout(int threadPoolTimeout) {
+
+        if (threadPoolTimeout < 1) {
+            throw new IllegalArgumentException("threadPoolTimeout needs to be at least 1");
+        }
+
+        this.threadPoolTimeout = threadPoolTimeout;
+    }
+
     public void filter(Class<? extends RequestFilter> filter) {
 
-        if (filter == null)
+        if (filter == null) {
             throw new IllegalArgumentException("filter cannot be null");
+        }
 
         this.filters.add(filter);
     }
 
     public void register(Class<?> clazz) {
 
-        if (clazz == null)
+        if (clazz == null) {
             throw new IllegalArgumentException("clazz cannot be null");
+        }
 
-        if (!clazz.isAnnotationPresent(Path.class))
+        if (!clazz.isAnnotationPresent(Path.class)) {
             throw new IllegalArgumentException("class " + clazz.getName() + " needs a Path annotation");
+        }
 
-        if (classes.contains(clazz))
+        if (classes.contains(clazz)) {
             throw new IllegalArgumentException("class " + clazz.getName() + " is already registered");
+        }
 
         classes.add(clazz);
     }
@@ -122,15 +137,17 @@ public abstract class CobraConfig {
 
         String scannedPath = packageName.replace(PKG_SEPARATOR, DIR_SEPARATOR);
         URL url = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
-        if (url == null)
+        if (url == null) {
             throw new IllegalArgumentException("package " + packageName + " does not exist");
+        }
 
         File scannedDir = new File(url.getFile());
         List<Class<?>> classes = new ArrayList<>();
 
         File[] files = scannedDir.listFiles();
-        if (files == null)
+        if (files == null) {
             throw new IllegalStateException();
+        }
 
         for (File file : files) {
             classes.addAll(scanSubPackages(file, packageName));
@@ -145,8 +162,9 @@ public abstract class CobraConfig {
         String resource = scannedPackage + PKG_SEPARATOR + file.getName();
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            if (files == null)
+            if (files == null) {
                 throw new IllegalStateException();
+            }
 
             for (File child : files) {
                 classes.addAll(scanSubPackages(child, resource));
