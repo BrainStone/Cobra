@@ -93,17 +93,19 @@ public class ResourceInfo {
                     // Get all params from the location
                     String paramString = httpRequest.location().substring(httpRequest.location().indexOf(mainPath) + mainPath.length(), httpRequest.location().length());
 
-                    // Remove the first slash
-                    paramString = paramString.substring(1);
+                    if (paramString.length() > 0) {
+                        // Remove the first slash
+                        paramString = paramString.substring(1);
 
-                    // Decode with the URL decoder
-                    paramString = URLDecoder.decode(paramString, "UTF-8");
+                        // Decode with the URL decoder
+                        paramString = URLDecoder.decode(paramString, "UTF-8");
 
-                    // Split with "/" to get all params
-                    String[] params = paramString.split("/");
+                        // Split with "/" to get all params
+                        String[] params = paramString.split("/");
 
-                    // Fast array copy
-                    System.arraycopy(params, 0, objects, 1, params.length/* + 1 - 1*/);
+                        // Fast array copy
+                        System.arraycopy(params, 0, objects, 1, params.length/* + 1 - 1*/);
+                    }
                 }
 
                 Response response = ((Response) entry.method.invoke(object, objects));
