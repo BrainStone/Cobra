@@ -29,6 +29,7 @@ import de.jackwhite20.cobra.server.http.annotation.FormParam;
 import de.jackwhite20.cobra.server.http.annotation.Path;
 import de.jackwhite20.cobra.server.http.annotation.Produces;
 import de.jackwhite20.cobra.server.http.annotation.method.DELETE;
+import de.jackwhite20.cobra.server.http.annotation.method.PATCH;
 import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.server.http.annotation.method.PUT;
 import de.jackwhite20.cobra.shared.ContentType;
@@ -71,7 +72,7 @@ public class CobraServerImpl implements CobraServer {
     public CobraServerImpl(CobraConfig cobraConfig) {
 
         this.cobraConfig = cobraConfig;
-        this.executorService = new ThreadPoolExecutor(cobraConfig.corePoolSize, cobraConfig.maxPoolSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        this.executorService = new ThreadPoolExecutor(cobraConfig.corePoolSize, cobraConfig.maxPoolSize, cobraConfig.threadPoolTimeout, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
         initConfig();
     }
@@ -115,6 +116,8 @@ public class CobraServerImpl implements CobraServer {
                         requestMethod = RequestMethod.DELETE;
                     } else if (method.isAnnotationPresent(PUT.class)) {
                         requestMethod = RequestMethod.PUT;
+                    } else if (method.isAnnotationPresent(PATCH.class)) {
+                        requestMethod = RequestMethod.PATCH;
                     }
 
                     ResourceInfo.Entry resEntry;

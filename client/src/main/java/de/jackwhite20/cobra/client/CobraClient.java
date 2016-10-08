@@ -57,6 +57,14 @@ public interface CobraClient {
 
     Response put(String relativePath, Proxy proxy, Headers headers) throws IOException;
 
+    Response patch(URL url, Headers headers) throws IOException;
+
+    Response patch(String relativePath, Headers headers) throws IOException;
+
+    Response patch(URL url, Proxy proxy, Headers headers) throws IOException;
+
+    Response patch(String relativePath, Proxy proxy, Headers headers) throws IOException;
+
     Response delete(URL url, Headers headers) throws IOException;
 
     Response delete(String relativePath, Headers headers) throws IOException;

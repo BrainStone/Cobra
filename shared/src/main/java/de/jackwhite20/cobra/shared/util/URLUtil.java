@@ -36,6 +36,8 @@ public final class URLUtil {
 
     public static final int CHUNK_SIZE = 2048;
 
+    public static final String USER_AGENT = "Cobra v2.0.1";
+
     private URLUtil() {
         // Do not allow instance creation
     }
@@ -53,7 +55,9 @@ public final class URLUtil {
 
     public static byte[] readResponse(HttpURLConnection connection) throws IOException {
 
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); InputStream inputStream = connection.getInputStream()) {
+        boolean error = connection.getResponseCode() >= 400;
+
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); InputStream inputStream = (!error) ? connection.getInputStream() : connection.getErrorStream()) {
             byte[] chunk = new byte[CHUNK_SIZE];
 
             int i;
@@ -74,7 +78,7 @@ public final class URLUtil {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
         connection.setConnectTimeout(connectTimeout);
         connection.setRequestMethod(method.name());
-        connection.setRequestProperty("User-Agent", "Cobra v2.0.0");
+        connection.setRequestProperty("User-Agent", USER_AGENT);
 
         for (Map.Entry<String, String> entry : headers.headers().entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
