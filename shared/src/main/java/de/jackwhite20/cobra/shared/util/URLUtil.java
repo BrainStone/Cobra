@@ -36,7 +36,7 @@ public final class URLUtil {
 
     public static final int CHUNK_SIZE = 2048;
 
-    public static final String USER_AGENT = "Cobra v2.0.1";
+    public static final String USER_AGENT = "Cobra v2.1.1";
 
     private URLUtil() {
         // Do not allow instance creation
