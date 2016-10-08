@@ -13,6 +13,7 @@ Cobra is very decent by design and there for of course high-performance.
 - GET
 - PUT
 - DELETE
+- PATCH
 
 # Installation
 
@@ -27,7 +28,7 @@ _Client:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-client</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.1.1-SNAPSHOT</version>
 </dependency>
 ```
 _Server:_
@@ -35,7 +36,7 @@ _Server:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-server</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.1.1-SNAPSHOT</version>
 </dependency>
 ```
 _If you want to use some of the shared code:_
@@ -43,7 +44,7 @@ _If you want to use some of the shared code:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-shared</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.1.1-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -170,6 +171,10 @@ public class ExampleCobraServer {
         	corePoolSize(8);
             // Set the maximum size of the underlying thread pool executor
         	maxPoolSize(16);
+        	
+        	// Able to set the thread pool timeout to reduce thread size faster
+        	// Sets the timeout to 5 seconds
+        	threadPoolTimeout(5);
             
 			// Register our example resource
             register(ExampleResource.class);

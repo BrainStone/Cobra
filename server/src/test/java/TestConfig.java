@@ -14,6 +14,8 @@ public class TestConfig extends CobraConfig {
         corePoolSize(8);
         maxPoolSize(16);
 
+        threadPoolTimeout(5);
+
         filter(TestFilter.class);
 
         //register(TestResource.class);
