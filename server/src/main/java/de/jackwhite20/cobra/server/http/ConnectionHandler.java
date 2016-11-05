@@ -53,8 +53,10 @@ public class ConnectionHandler implements Runnable {
         try {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.outputStream = socket.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignore) {
+            try {
+                socket.close();
+            } catch (IOException ignored) {}
         }
     }
 
@@ -76,8 +78,9 @@ public class ConnectionHandler implements Runnable {
                     if (length > 0) {
                         char[] charArray = new char[length];
                         int read = bufferedReader.read(charArray, 0, length);
-                        if(read != -1)
+                        if(read != -1) {
                             httpRequest.postData(new String(charArray));
+                        }
                     }
                 }
 
@@ -103,13 +106,11 @@ public class ConnectionHandler implements Runnable {
                 }
                 outputStream.flush();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+        } catch (IOException ignore) {}
+        finally {
             try {
                 socket.close();
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignore) {}
         }
     }
 }
