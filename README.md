@@ -152,7 +152,7 @@ public class ExampleCobraServer {
 
     public static void main(String[] args) {
 
-		// Create a new server instance with the cobra config below
+	// Create a new server instance with the cobra config below
         CobraServer cobraServer = CobraServerFactory.create(new ExampleConfig());
         // Start the server
         cobraServer.start();
@@ -167,16 +167,16 @@ public class ExampleCobraServer {
             // Set the port to listen on
             port(8080);
 
-			// Set the core size of the underlying thread pool executor
-			corePoolSize(8);
-			// Set the maximum size of the underlying thread pool executor
-			maxPoolSize(16);
+	    // Set the core size of the underlying thread pool executor
+	    corePoolSize(8);
+	    // Set the maximum size of the underlying thread pool executor
+	    maxPoolSize(16);
 
-        	// Able to set the thread pool timeout to reduce thread size faster
-        	// Sets the timeout to 5 seconds
-        	threadPoolTimeout(5);
+       	    // Able to set the thread pool timeout to reduce thread size faster
+            // Sets the timeout to 5 seconds
+            threadPoolTimeout(5);
             
-			// Register our example resource
+	    // Register our example resource
             register(ExampleResource.class);
             
             // Register our example filter
