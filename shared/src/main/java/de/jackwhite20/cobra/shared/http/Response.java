@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -19,8 +19,12 @@
 
 package de.jackwhite20.cobra.shared.http;
 
+import com.google.common.base.Preconditions;
 import de.jackwhite20.cobra.shared.Status;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.Map;
 
@@ -48,7 +52,7 @@ public class Response {
     public void addDefaultHeaders() {
 
         headers.header("Date", new Date().toString());
-        headers.header("Server", "Cobra v0.1");
+        headers.header("Server", "Cobra v2.2.2");
         headers.header("Connection", "close");
         if (body != null) {
             headers.header("Content-Length", Integer.toString(body.bytes().length));
@@ -105,6 +109,28 @@ public class Response {
     public static Builder status(Status status) {
 
         return new Builder(status);
+    }
+
+    public static Response file(File file) {
+
+        Preconditions.checkArgument(file != null, "file cannot be null");
+        Preconditions.checkArgument(!file.isDirectory(), "file is a directory");
+        Preconditions.checkArgument(file.exists(), "file '" + file.getName() + "' does not exists");
+
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+
+            return Response.ok().header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"").content(bytes).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+    }
+
+    public static Response file(String path) {
+
+        return file(new File(path));
     }
 
     public static class Builder {

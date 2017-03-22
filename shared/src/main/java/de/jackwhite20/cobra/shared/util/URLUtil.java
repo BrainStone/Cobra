@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -22,7 +22,9 @@ package de.jackwhite20.cobra.shared.util;
 import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.http.Headers;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -27,12 +27,8 @@ import de.jackwhite20.cobra.server.http.annotation.Produces;
 import de.jackwhite20.cobra.server.http.annotation.method.GET;
 import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.shared.ContentType;
-import de.jackwhite20.cobra.shared.Status;
 import de.jackwhite20.cobra.shared.http.Response;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -82,14 +78,7 @@ public class TestResource {
     @Produces(ContentType.APPLICATION_OCTET_STREAM)
     public Response download(Request httpRequest) {
 
-        try {
-            byte[] file = Files.readAllBytes(Paths.get("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt"));
-
-            return Response.ok().header("Content-Disposition", "attachment; filename=\"test.txt\"").content(file).build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return Response.status(Status.EXPECTATION_FAILED).build();
+        return Response.file("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt");
+        //return Response.file(new File("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt"));
     }
 }
