@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -43,7 +43,6 @@ public final class URLUtil {
     }
 
     public static Headers filterHeaders(Map<String, List<String>> headers) {
-
         Headers headersReturn = Headers.empty();
 
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
@@ -54,7 +53,6 @@ public final class URLUtil {
     }
 
     public static byte[] readResponse(HttpURLConnection connection) throws IOException {
-
         boolean error = connection.getResponseCode() >= 400;
 
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); InputStream inputStream = (!error) ? connection.getInputStream() : connection.getErrorStream()) {
@@ -70,7 +68,6 @@ public final class URLUtil {
     }
 
     public static HttpURLConnection connection(URL url, Proxy proxy, int connectTimeout, Headers headers, RequestMethod method) throws IOException {
-
         if (proxy == null) {
             proxy = Proxy.NO_PROXY;
         }

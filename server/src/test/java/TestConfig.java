@@ -6,7 +6,6 @@ import de.jackwhite20.cobra.server.impl.CobraConfig;
 public class TestConfig extends CobraConfig {
 
     public TestConfig() {
-
         host("localhost");
         port(8080);
         backLog(25);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -33,18 +33,105 @@ import java.net.URL;
  */
 public interface CobraClient {
 
+    /**
+     * Executes a POST request to the given URL with the given body and headers.
+     *
+     * @param url The URL to request.
+     * @param body The body to post.
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(URL url, Body body, Headers headers) throws IOException;
 
+    /**
+     * Executes a POST request to the given relative path with the given body and headers.
+     *
+     * The relative path will be added to the base URL when CobraClientFactory.create(String baseUrl) was used.
+     * Given the following values:
+     * baseUrl = https://some.api/
+     * relativePath = users/add
+     *
+     * The following URL will be requested: https://some.api/users/add
+     *
+     * @param relativePath The relative path to request.
+     * @param body The body to post.
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(String relativePath, Body body, Headers headers) throws IOException;
 
+    /**
+     * Executes a POST request to the URL, trough the proxy and with the given body and headers.
+     *
+     * @param url The URL to request.
+     * @param proxy The proxy to use.
+     * @param body The body to post.
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(URL url, Proxy proxy, Body body, Headers headers) throws IOException;
 
+    /**
+     * Executes a POST request to the relative path, through the proxy with the given body and headers.
+     *
+     * The relative path will be added to the base URL when CobraClientFactory.create(String baseUrl) was used.
+     * Given the following values:
+     * baseUrl = https://some.api/
+     * relativePath = users/add
+     *
+     * The following URL will be requested: https://some.api/users/add
+     *
+     * @param relativePath The relative path to request.
+     * @param proxy The proxy to use.
+     * @param body The body to post.
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(String relativePath, Proxy proxy, Body body, Headers headers) throws IOException;
 
+    /**
+     * Executes a POST request to the URL with the given object, which will be converted to JSON, and headers.
+     *
+     * @param url The URL to request.
+     * @param body The body object to post (will be converted to JSON).
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(URL url, Object body, Headers headers) throws IOException;
 
+    /**
+     * Executes a POST request to the relative path with the given object, which will be converted to JSON, and headers.
+     *
+     * The relative path will be added to the base URL when CobraClientFactory.create(String baseUrl) was used.
+     * Given the following values:
+     * baseUrl = https://some.api/
+     * relativePath = users/add
+     *
+     * The following URL will be requested: https://some.api/users/add
+     *
+     * @param relativePath The relative path to request.
+     * @param body The body object to post (will be converted to JSON).
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(String relativePath, Object body, Headers headers) throws IOException;
 
+    /**
+     * Executes a POST request to the URL, through the proxy, with the given object, which will be converted to JSON, and headers.
+     *
+     * @param url The URL to request.
+     * @param proxy The proxy to use.
+     * @param body The body object to post (will be converted to JSON).
+     * @param headers The headers for the request.
+     * @return The response containing the status, response headers and body.
+     * @throws IOException If something went wrong during the request.
+     */
     Response post(URL url, Proxy proxy, Object body, Headers headers) throws IOException;
 
     Response post(String relativePath, Proxy proxy, Object body, Headers headers) throws IOException;
@@ -97,7 +184,17 @@ public interface CobraClient {
 
     Response download(String relativePath, Proxy proxy, Headers headers, String folderToSaveTo) throws IOException;
 
+    /**
+     * Returns the connect timeout milliseconds used by the cobra client.
+     *
+     * @return The connect timeout in milliseconds.
+     */
     int connectTimeout();
 
+    /**
+     * Returns the GSON instance used by the cobra client.
+     *
+     * @return The GSON instance.
+     */
     Gson gson();
 }

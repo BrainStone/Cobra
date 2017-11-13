@@ -20,10 +20,7 @@
 package resources;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.server.http.annotation.FormParam;
-import de.jackwhite20.cobra.server.http.annotation.Path;
-import de.jackwhite20.cobra.server.http.annotation.PathParam;
-import de.jackwhite20.cobra.server.http.annotation.Produces;
+import de.jackwhite20.cobra.server.http.annotation.*;
 import de.jackwhite20.cobra.server.http.annotation.method.GET;
 import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.shared.ContentType;
@@ -47,7 +44,6 @@ public class TestResource {
     @Path("/info")
     @Produces(ContentType.TEXT_HTML)
     public Response info(Request httpRequest, @FormParam("name") String name, @FormParam("password") String password) {
-
         System.out.println("Name: " + name);
         System.out.println("Password: " + password);
 
@@ -57,23 +53,18 @@ public class TestResource {
     @GET
     @Path("/test")
     public Response test(Request httpRequest) {
-
         return Response.ok().content("<H1>test</H1>").build();
     }
 
     @GET
     @Path("/hello/{name}")
     public Response hello(Request httpRequest, @PathParam String name) {
-
-
         return Response.ok().content("<H1>Hello " + name + "!</H1>").build();
     }
 
     @GET
     @Path("/bye/{name}/{name2}")
     public Response bye(Request httpRequest, @PathParam String name, @PathParam String name2) {
-
-
         return Response.ok().content("<H1>Bye " + name + " " + name2 + "!</H1>").build();
     }
 
@@ -81,7 +72,6 @@ public class TestResource {
     @Path("/download")
     @Produces(ContentType.APPLICATION_OCTET_STREAM)
     public Response download(Request httpRequest) {
-
         try {
             byte[] file = Files.readAllBytes(Paths.get("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt"));
 
@@ -91,5 +81,13 @@ public class TestResource {
         }
 
         return Response.status(Status.EXPECTATION_FAILED).build();
+    }
+
+    @POST
+    @Path("/upload")
+    @Consumes(ContentType.ALL)
+    @Produces(ContentType.TEXT_HTML)
+    public Response upload(Request httpRequest) {
+        return Response.ok().build();
     }
 }

@@ -29,8 +29,8 @@ public class TestFilter implements RequestFilter {
 
     @Override
     public void filter(FilteredRequest request) {
-
-        if (request.header("X-Test") != null)
+        if (request.header("X-Test") != null) {
             request.abortWith(Response.status(Status.FORBIDDEN).build());
+        }
     }
 }

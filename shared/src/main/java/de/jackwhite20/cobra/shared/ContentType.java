@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -33,12 +33,10 @@ public enum ContentType {
     private String type;
 
     ContentType(String type) {
-
         this.type = type;
     }
 
     public String type() {
-
         return type;
     }
 }

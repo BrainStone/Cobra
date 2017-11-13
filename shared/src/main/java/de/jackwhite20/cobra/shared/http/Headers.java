@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -34,29 +34,24 @@ public class Headers {
     }
 
     public Headers(String name, String value) {
-
         header(name, value);
     }
 
     public Headers header(String name, String value) {
-
         headers.put(name, value);
 
         return this;
     }
 
     public Map<String, String> headers() {
-
         return headers;
     }
 
     public static Headers empty() {
-
         return new Headers();
     }
 
     public static Headers from(String name, String value) {
-
         return new Headers(name, value);
     }
 }

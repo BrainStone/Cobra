@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -32,7 +32,6 @@ public final class CobraServerFactory {
     }
 
     public static CobraServer create(CobraConfig cobraConfig) {
-
         if (cobraConfig == null) {
             throw new IllegalArgumentException("cobraConfig cannot be null");
         }
@@ -41,7 +40,6 @@ public final class CobraServerFactory {
     }
 
     public static CobraServer create() {
-
         return new CobraServerImpl();
     }
 }

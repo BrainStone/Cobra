@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -55,28 +55,26 @@ public abstract class CobraConfig {
     protected final List<Class<? extends RequestFilter>> filters = new ArrayList<>();
 
     public void host(String host) {
-
-        if (host == null)
+        if (host == null) {
             throw new IllegalArgumentException("host cannot be null");
+        }
 
         this.host = host;
     }
 
     public void port(int port) {
-
-        if (port < 0)
+        if (port < 0) {
             throw new IllegalArgumentException("port cannot be negative");
+        }
 
         this.port = port;
     }
 
     public void backLog(int backLog) {
-
         this.backLog = backLog;
     }
 
     public void corePoolSize(int corePoolSize) {
-
         if(corePoolSize < 2) {
             throw new IllegalArgumentException("corePoolSize needs to be at least 2");
         }
@@ -85,7 +83,6 @@ public abstract class CobraConfig {
     }
 
     public void maxPoolSize(int maxPoolSize) {
-
         if(maxPoolSize < 2) {
             throw new IllegalArgumentException("maxPoolSize needs to be at least 2");
         }
@@ -94,7 +91,6 @@ public abstract class CobraConfig {
     }
 
     public void threadPoolTimeout(int threadPoolTimeout) {
-
         if (threadPoolTimeout < 1) {
             throw new IllegalArgumentException("threadPoolTimeout needs to be at least 1");
         }
@@ -103,7 +99,6 @@ public abstract class CobraConfig {
     }
 
     public void filter(Class<? extends RequestFilter> filter) {
-
         if (filter == null) {
             throw new IllegalArgumentException("filter cannot be null");
         }
@@ -112,7 +107,6 @@ public abstract class CobraConfig {
     }
 
     public void register(Class<?> clazz) {
-
         if (clazz == null) {
             throw new IllegalArgumentException("clazz cannot be null");
         }
@@ -129,12 +123,10 @@ public abstract class CobraConfig {
     }
 
     public void register(String packageName) {
-
         scanPackage(packageName).forEach(this::register);
     }
 
     private List<Class<?>> scanPackage(String packageName) {
-
         String scannedPath = packageName.replace(PKG_SEPARATOR, DIR_SEPARATOR);
         URL url = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
         if (url == null) {
@@ -157,7 +149,6 @@ public abstract class CobraConfig {
     }
 
     private List<Class<?>> scanSubPackages(File file, String scannedPackage) {
-
         List<Class<?>> classes = new ArrayList<>();
         String resource = scannedPackage + PKG_SEPARATOR + file.getName();
         if (file.isDirectory()) {
@@ -174,8 +165,7 @@ public abstract class CobraConfig {
             String className = resource.substring(0, endIndex);
             try {
                 classes.add(Class.forName(className));
-            } catch (ClassNotFoundException ignore) {
-            }
+            } catch (ClassNotFoundException ignore) {}
         }
 
         return classes;

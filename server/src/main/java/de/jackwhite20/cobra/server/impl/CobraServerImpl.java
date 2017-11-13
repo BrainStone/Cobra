@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -70,7 +70,6 @@ public class CobraServerImpl implements CobraServer {
     }
 
     public CobraServerImpl(CobraConfig cobraConfig) {
-
         this.cobraConfig = cobraConfig;
         this.executorService = new ThreadPoolExecutor(cobraConfig.corePoolSize, cobraConfig.maxPoolSize, cobraConfig.threadPoolTimeout, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
@@ -78,7 +77,6 @@ public class CobraServerImpl implements CobraServer {
     }
 
     private void initConfig() {
-
         filters.clear();
         resourceInfo.clear();
 
@@ -94,7 +92,6 @@ public class CobraServerImpl implements CobraServer {
     }
 
     private void scanClass(Class<?> clazz) {
-
         ResourceInfo resourceInfo = null;
         try {
             resourceInfo = new ResourceInfo(clazz.newInstance(), clazz.getAnnotation(Path.class).value());
@@ -170,7 +167,6 @@ public class CobraServerImpl implements CobraServer {
 
     @Override
     public void start() {
-
         if (running) {
             throw new IllegalStateException("server is already running");
         }
@@ -192,7 +188,6 @@ public class CobraServerImpl implements CobraServer {
 
     @Override
     public void stop() {
-
         if (!running) {
             throw new IllegalStateException("server is already stopped");
         }
@@ -212,21 +207,18 @@ public class CobraServerImpl implements CobraServer {
 
     @Override
     public void config(CobraConfig cobraConfig) {
-
         this.cobraConfig = cobraConfig;
 
         initConfig();
     }
 
     public void filter(FilteredRequest filteredRequest) {
-
         for (RequestFilter filter : filters) {
             filter.filter(filteredRequest);
         }
     }
 
     public Response handleRequest(Request request) {
-
         for (Map.Entry<String, ResourceInfo> entry : resourceInfo.entrySet()) {
             if (request.location().startsWith(entry.getKey())) {
 
@@ -241,7 +233,6 @@ public class CobraServerImpl implements CobraServer {
 
         @Override
         public void run() {
-
             while (running) {
                 try {
                     executorService.execute(new ConnectionHandler(serverSocket.accept(), CobraServerImpl.this));

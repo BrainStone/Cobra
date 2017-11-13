@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -43,13 +43,12 @@ public class Request {
     private Map<String, String> postData = new HashMap<>();
 
     public Request(String raw) {
-
         this.raw = raw;
+
         parse();
     }
 
     private void parse() {
-
         StringTokenizer tokenizer = new StringTokenizer(raw);
 
         method = RequestMethod.valueOf(tokenizer.nextToken());
@@ -71,27 +70,22 @@ public class Request {
     }
 
     public RequestMethod method() {
-
         return method;
     }
 
     public String location() {
-
         return location;
     }
 
     public String version() {
-
         return version;
     }
 
     public String header(String key) {
-
         return headers.get(key);
     }
 
     protected void postData(String data) {
-
         String[] splitted = data.split("&");
         for (String aSplitted : splitted) {
             String[] keyVal = aSplitted.split("=");
@@ -102,13 +96,11 @@ public class Request {
     }
 
     public String post(String key) {
-
         return postData.get(key);
     }
 
     @Override
     public String toString() {
-
         return "HTTPRequest{" +
                 ", method=" + method +
                 ", location='" + location + '\'' +

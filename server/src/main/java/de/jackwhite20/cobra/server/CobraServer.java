@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -26,9 +26,22 @@ import de.jackwhite20.cobra.server.impl.CobraConfig;
  */
 public interface CobraServer {
 
+    /**
+     * Starts the server.
+     */
     void start();
 
+    /**
+     * Stops the server.
+     */
     void stop();
 
+    /**
+     * Sets the config to use.
+     *
+     * Needs to be called before start, if no config was passed to the factory.
+     *
+     * @param cobraConfig The config to use.
+     */
     void config(CobraConfig cobraConfig);
 }

@@ -7,7 +7,6 @@ import de.jackwhite20.cobra.server.CobraServerFactory;
 public class CobraServerTest {
 
     public static void main(String[] args) {
-
         CobraServer cobraServer = CobraServerFactory.create(new TestConfig());
         cobraServer.start();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -33,32 +33,26 @@ public class FilteredRequest {
     private Response response;
 
     public FilteredRequest(Request request) {
-
         this.request = request;
     }
 
     public void abortWith(Response response) {
-
         this.response = response;
     }
 
     public RequestMethod method() {
-
         return request.method();
     }
 
     public String location() {
-
         return request.location();
     }
 
     public String header(String key) {
-
         return request.header(key);
     }
 
     public Response response() {
-
         return response;
     }
 }

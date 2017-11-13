@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -32,19 +32,16 @@ public final class CobraClientFactory {
     }
 
     public static CobraClient create() {
-
         return new CobraClientImpl();
     }
 
     public static CobraClient create(int connectTimeout) {
-
         Preconditions.checkArgument(connectTimeout > 0, "connectTimeout cannot be negative");
 
         return new CobraClientImpl(connectTimeout);
     }
 
     public static CobraClient create(String baseUrl) {
-
         Preconditions.checkArgument(baseUrl != null, "baseUrl cannot be null");
         Preconditions.checkArgument(!baseUrl.isEmpty(), "baseUrl cannot be empty");
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -43,13 +43,11 @@ public class ResourceInfo {
     private Map<String, Entry> methods = new HashMap<>();
 
     public ResourceInfo(Object object, String rootPath) {
-
         this.object = object;
         this.rootPath = rootPath;
     }
 
     public Response execute(String path, Request httpRequest) {
-
         // Search the right entry from the path requested because the path can have path parameters
         for (Map.Entry<String, Entry> entry : methods.entrySet()) {
             if (path.startsWith(entry.getKey())) {
@@ -61,7 +59,6 @@ public class ResourceInfo {
     }
 
     private Response process(String mainPath, Entry entry, Request httpRequest) {
-
         if (entry != null) {
             if (!entry.acceptContentType.equals("*/*") && !entry.acceptContentType.equals(httpRequest.header("Content-Type"))) {
                 return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
@@ -120,17 +117,14 @@ public class ResourceInfo {
     }
 
     public void add(String path, Entry entry) {
-
         methods.put(path, entry);
     }
 
     public String rootPath() {
-
         return rootPath;
     }
 
     public Method method(String path) {
-
         return methods.get(path).method;
     }
 
@@ -149,7 +143,6 @@ public class ResourceInfo {
         private List<String> pathParameters = new ArrayList<>();
 
         public Entry(Method method, String contentType, String acceptContentType, RequestMethod requestMethod) {
-
             this.method = method;
             this.contentType = contentType;
             this.acceptContentType = acceptContentType;
@@ -157,42 +150,34 @@ public class ResourceInfo {
         }
 
         public Entry(Method method, RequestMethod requestMethod) {
-
             this(method, "text/html; charset=utf-8", "*/*", requestMethod);
         }
 
         public void addPostKey(String postKey) {
-
             postParameters.add(postKey);
         }
 
         public void addPathKey(String pathKey) {
-
             pathParameters.add(pathKey);
         }
 
         public Method method() {
-
             return method;
         }
 
         public String contentType() {
-
             return contentType;
         }
 
         public String acceptContentType() {
-
             return acceptContentType;
         }
 
         public RequestMethod requestMethod() {
-
             return requestMethod;
         }
 
         public List<String> postParameters() {
-
             return postParameters;
         }
     }

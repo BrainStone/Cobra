@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -51,23 +51,19 @@ public enum Status {
     private final String reason;
 
     Status(int code, String reason) {
-
         this.code = code;
         this.reason = reason;
     }
 
     public int status() {
-
         return code;
     }
 
     public String reason() {
-
         return reason;
     }
 
     public static Status valueOf(int code) {
-
         for (Status status : values()) {
             if (status.code == code) {
                 return status;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 "JackWhite20"
+ * Copyright (c) 2017 "JackWhite20"
  *
  * This file is part of Cobra.
  *
@@ -27,37 +27,30 @@ public class Body {
     private byte[] bytes;
 
     public Body(byte[] bytes) {
-
         this.bytes = bytes;
     }
 
     public Body(String body) {
-
         this.bytes = body.getBytes();
     }
 
     public byte[] bytes() {
-
         return bytes.clone();
     }
 
     public String content() {
-
         return new String(bytes);
     }
 
     public static Builder form(String key, String value) {
-
         return new Builder(key, value);
     }
 
     public static Body of(byte[] bytes) {
-
         return new Body(bytes);
     }
 
     public static Body of(String content) {
-
         return new Body(content);
     }
 
@@ -66,19 +59,16 @@ public class Body {
         private StringBuilder formBody = new StringBuilder();
 
         public Builder(String key, String value) {
-
             formBody.append(key).append("=").append(value);
         }
 
         public Builder form(String key, String value) {
-
             formBody.append("&").append(key).append("=").append(value);
 
             return this;
         }
 
         public Body build() {
-
             return new Body(formBody.toString());
         }
     }

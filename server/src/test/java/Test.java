@@ -39,7 +39,6 @@ import de.jackwhite20.cobra.shared.http.Response;
 public class Test {
 
     public static void main(String[] args) {
-
         CobraServer cobraServer = CobraServerFactory.create(new ExampleConfig());
         cobraServer.start();
     }
@@ -47,7 +46,6 @@ public class Test {
     public static class ExampleConfig extends CobraConfig {
 
         public ExampleConfig() {
-
             host("0.0.0.0");
             port(8080);
 
@@ -64,7 +62,6 @@ public class Test {
         @Path("/hello")
         @Produces(ContentType.TEXT_HTML)
         public Response hello(Request httpRequest) {
-
             return Response.ok().content("<H1>Hello</H1>").build();
         }
 
@@ -72,7 +69,6 @@ public class Test {
         @Path("/world")
         @Produces(ContentType.TEXT_HTML)
         public Response world(Request httpRequest, @FormParam("name") String name) {
-
             return Response.ok()
                     .content("<H1>World " + name + "!</H1>")
                     .header("X-Test", "Hello xD")
@@ -83,7 +79,6 @@ public class Test {
         @Path("/say/{text}")
         @Produces(ContentType.TEXT_HTML)
         public Response hello(Request httpRequest, @PathParam String text) {
-
             return Response.ok().content("<H1>" + text + "</H1>").build();
         }
     }

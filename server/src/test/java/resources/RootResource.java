@@ -33,7 +33,6 @@ public class RootResource {
     @GET
     @Path("")
     public Response root(Request httpRequest) {
-
         return Response.ok().content("Root path!").build();
     }
 }
