@@ -20,7 +20,6 @@
 package de.jackwhite20.cobra.server.filter;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.http.Response;
 
 /**
@@ -40,16 +39,8 @@ public class FilteredRequest {
         this.response = response;
     }
 
-    public RequestMethod method() {
-        return request.method();
-    }
-
-    public String location() {
-        return request.location();
-    }
-
-    public String header(String key) {
-        return request.header(key);
+    public Request request() {
+        return request;
     }
 
     public Response response() {

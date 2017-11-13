@@ -89,7 +89,7 @@ public class Test {
         public void filter(FilteredRequest request) {
 
             // Here you can filter for headers or anything the request object has
-            if (request.header("X-Special-Header") == null) {
+            if (request.request().header("X-Special-Header") == null) {
                 // Abort it
                 request.abortWith(Response.status(Status.FORBIDDEN).build());
             }

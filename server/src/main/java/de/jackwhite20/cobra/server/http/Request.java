@@ -21,6 +21,7 @@ package de.jackwhite20.cobra.server.http;
 
 import de.jackwhite20.cobra.shared.RequestMethod;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -95,8 +96,32 @@ public class Request {
         }
     }
 
+    /**
+     * Returns the post form value from the given key.
+     *
+     * @param key The key.
+     * @return The form value from the key.
+     */
     public String post(String key) {
         return postData.get(key);
+    }
+
+    /**
+     * Returns the post data from the request.
+     *
+     * @return The post data as form key value data.
+     */
+    public Map<String, String> postData() {
+        return Collections.unmodifiableMap(postData);
+    }
+
+    /**
+     * Returns the headers from the request.
+     *
+     * @return The headers from the request.
+     */
+    public Map<String, String> headers() {
+        return Collections.unmodifiableMap(headers);
     }
 
     @Override
