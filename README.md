@@ -28,7 +28,7 @@ _Client:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-client</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.2.2-SNAPSHOT</version>
 </dependency>
 ```
 _Server:_
@@ -36,7 +36,7 @@ _Server:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-server</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.2.2-SNAPSHOT</version>
 </dependency>
 ```
 _If you only want to use some of the shared code:_
@@ -44,7 +44,7 @@ _If you only want to use some of the shared code:_
 <dependency>
     <groupId>de.jackwhite20</groupId>
     <artifactId>cobra-shared</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.2.2-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -152,7 +152,7 @@ public class ExampleCobraServer {
 
     public static void main(String[] args) {
 
-		// Create a new server instance with the cobra config below
+	// Create a new server instance with the cobra config below
         CobraServer cobraServer = CobraServerFactory.create(new ExampleConfig());
         // Start the server
         cobraServer.start();
@@ -162,21 +162,21 @@ public class ExampleCobraServer {
 
         public ExampleConfig() {
 
-			// Set the listening host ip
+            // Set the listening host ip
             host("0.0.0.0");
             // Set the port to listen on
             port(8080);
-			
-            // Set the core size of the underlying thread pool executor
-        	corePoolSize(8);
-            // Set the maximum size of the underlying thread pool executor
-        	maxPoolSize(16);
-        	
-        	// Able to set the thread pool timeout to reduce thread size faster
-        	// Sets the timeout to 5 seconds
-        	threadPoolTimeout(5);
+
+	    // Set the core size of the underlying thread pool executor
+	    corePoolSize(8);
+	    // Set the maximum size of the underlying thread pool executor
+	    maxPoolSize(16);
+
+       	    // Able to set the thread pool timeout to reduce thread size faster
+            // Sets the timeout to 5 seconds
+            threadPoolTimeout(5);
             
-			// Register our example resource
+	    // Register our example resource
             register(ExampleResource.class);
             
             // Register our example filter
@@ -212,6 +212,15 @@ public class ExampleCobraServer {
         public Response hello(Request httpRequest, @PathParam String text) {
 
             return Response.ok().content("<H1>" + text + "</H1>").build();
+        }
+
+        @GET
+        @Path("/download")
+        @Produces(ContentType.APPLICATION_OCTET_STREAM)
+        public Response download(Request httpRequest) {
+
+            return Response.file("text.zip");
+            //return Response.file(new File("text.zip"));
         }
     }
     
