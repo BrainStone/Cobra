@@ -50,7 +50,9 @@ public class ResourceInfo {
     public Response execute(String path, Request httpRequest) {
         // Search the right entry from the path requested because the path can have path parameters
         for (Map.Entry<String, Entry> entry : methods.entrySet()) {
+            System.out.println(path + " | " + entry.getKey());
             if (path.startsWith(entry.getKey())) {
+                System.out.println(".");
                 return process(entry.getKey(), entry.getValue(), httpRequest);
             }
         }
@@ -73,11 +75,12 @@ public class ResourceInfo {
                 Object[] objects = {httpRequest};
 
                 if (httpRequest.method() == RequestMethod.POST) {
+                    System.out.println(entry.postParameters.size());
                     objects = new Object[entry.postParameters.size() + 1];
                     objects[0] = httpRequest;
                     int i = 1;
                     for (String parameter : entry.postParameters) {
-                        objects[i] = httpRequest.post(parameter);
+                        objects[i] = httpRequest.postForm(parameter);
                         i++;
                     }
                 }

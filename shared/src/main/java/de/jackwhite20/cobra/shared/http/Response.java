@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.shared.http;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import de.jackwhite20.cobra.shared.Status;
 
@@ -100,7 +101,6 @@ public class Response {
     }
 
     public static Response file(File file) {
-
         Preconditions.checkArgument(file != null, "file cannot be null");
         Preconditions.checkArgument(!file.isDirectory(), "file is a directory");
         Preconditions.checkArgument(file.exists(), "file '" + file.getName() + "' does not exists");
@@ -117,7 +117,6 @@ public class Response {
     }
 
     public static Response file(String path) {
-
         return file(new File(path));
     }
 
@@ -146,9 +145,8 @@ public class Response {
         }
 
         public Builder content(String content) {
-            return content(content.getBytes());
+            return content(content.getBytes(Charsets.UTF_8));
         }
-
 
         public Builder header(String key, String value) {
             headers.header(key, value);

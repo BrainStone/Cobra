@@ -20,6 +20,7 @@
 package de.jackwhite20.cobra.server.http;
 
 import de.jackwhite20.cobra.shared.RequestMethod;
+import de.jackwhite20.cobra.shared.http.Body;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +42,9 @@ public class Request {
 
     private Map<String, String> headers = new HashMap<>();
 
-    private Map<String, String> postData = new HashMap<>();
+    private Body body;
+
+    private Map<String, String> postForm;
 
     public Request(String raw) {
         this.raw = raw;
@@ -86,14 +89,20 @@ public class Request {
         return headers.get(key);
     }
 
-    protected void postData(String data) {
+    private void postData(String data) {
+        postForm = new HashMap<>();
+
         String[] splitted = data.split("&");
         for (String aSplitted : splitted) {
             String[] keyVal = aSplitted.split("=");
             if (keyVal.length == 2) {
-                postData.put(keyVal[0], keyVal[1]);
+                postForm.put(keyVal[0], keyVal[1]);
             }
         }
+    }
+
+    protected void body(byte[] bytes) {
+        body = Body.of(bytes);
     }
 
     /**
@@ -102,8 +111,12 @@ public class Request {
      * @param key The key.
      * @return The form value from the key.
      */
-    public String post(String key) {
-        return postData.get(key);
+    public String postForm(String key) {
+        if (postForm == null) {
+            postData(body.content());
+        }
+
+        return postForm.get(key);
     }
 
     /**
@@ -111,8 +124,17 @@ public class Request {
      *
      * @return The post data as form key value data.
      */
-    public Map<String, String> postData() {
-        return Collections.unmodifiableMap(postData);
+    public Map<String, String> postForm() {
+        return Collections.unmodifiableMap(postForm);
+    }
+
+    /**
+     * Get the raw body of this request.
+     *
+     * @return The raw body.
+     */
+    public Body body() {
+        return body;
     }
 
     /**

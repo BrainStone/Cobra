@@ -20,10 +20,7 @@
 package resources;
 
 import de.jackwhite20.cobra.server.http.Request;
-import de.jackwhite20.cobra.server.http.annotation.FormParam;
-import de.jackwhite20.cobra.server.http.annotation.Path;
-import de.jackwhite20.cobra.server.http.annotation.PathParam;
-import de.jackwhite20.cobra.server.http.annotation.Produces;
+import de.jackwhite20.cobra.server.http.annotation.*;
 import de.jackwhite20.cobra.server.http.annotation.method.GET;
 import de.jackwhite20.cobra.server.http.annotation.method.POST;
 import de.jackwhite20.cobra.shared.ContentType;
@@ -73,5 +70,15 @@ public class TestResource {
     public Response download(Request httpRequest) {
         return Response.file("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt");
         //return Response.file(new File("E:\\GitHub\\Cobra\\server\\src\\test\\java\\text.txt"));
+    }
+
+    @POST
+    @Path("/upload")
+    @Consumes(ContentType.APPLICATION_OCTET_STREAM)
+    public Response upload(Request httpRequest) {
+        // Raw post data as bytes
+        byte[] bytes = httpRequest.body().bytes();
+
+        return Response.ok().build();
     }
 }

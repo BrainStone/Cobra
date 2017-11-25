@@ -24,9 +24,9 @@ import de.jackwhite20.cobra.server.impl.CobraServerImpl;
 import de.jackwhite20.cobra.shared.RequestMethod;
 import de.jackwhite20.cobra.shared.http.Response;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map;
@@ -44,13 +44,19 @@ public class ConnectionHandler implements Runnable {
 
     private BufferedReader bufferedReader;
 
+    private BufferedInputStream bufferedInputStream;
+
+    private HttpReader httpReader;
+
     private OutputStream outputStream;
 
     public ConnectionHandler(Socket socket, CobraServerImpl cobraServer) {
         this.socket = socket;
         this.cobraServer = cobraServer;
         try {
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            //this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.httpReader = new HttpReader(socket.getInputStream(), "UTF-8");
+            //this.bufferedInputStream = new BufferedInputStream(socket.getInputStream());
             this.outputStream = socket.getOutputStream();
         } catch (IOException ignore) {
             try {
@@ -61,7 +67,83 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
-        StringBuilder lines = new StringBuilder();
+        try {
+            StringBuilder lines = new StringBuilder(260);
+
+            int c;
+            while ((c = httpReader.read()) != -1) {
+                if ((char) c == '\r') {
+                    lines.append("\r");
+
+                    char next = (char) httpReader.read();
+                    lines.append(next);
+                    if (next == '\n') {
+                        next = (char) httpReader.read();
+                        lines.append(next);
+                        if (next == '\r') {
+                            next = (char) httpReader.read();
+                            lines.append(next);
+                            if (next == '\n') {
+                                // POST data start, break
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    lines.append((char) c);
+                }
+            }
+
+            String request = lines.toString();
+
+            System.out.println("Request: " + request);
+
+            if (!request.isEmpty()) {
+                Request httpRequest = new Request(request);
+
+                if (httpRequest.method() == RequestMethod.POST) {
+                    int length = Integer.parseInt(httpRequest.header("Content-Length"));
+                    if (length > 0) {
+                        httpReader.buffer().position(httpReader.buffer().position() - 1);
+
+                        byte[] bytes = new byte[length];
+                        httpReader.buffer().get(bytes);
+
+                        httpRequest.body(bytes);
+                    }
+                }
+
+                if (httpRequest.location().isEmpty()) {
+                    httpRequest.location = "*";
+                }
+
+                // TODO: 04.02.2016
+                FilteredRequest filteredRequest = new FilteredRequest(httpRequest);
+                cobraServer.filter(filteredRequest);
+
+                Response response = (filteredRequest.response() == null) ? cobraServer.handleRequest(httpRequest) : filteredRequest.response();
+                response.addDefaultHeaders();
+                outputStream.write((Response.VERSION + " " + response.responseCode() + " " + response.responseReason()).getBytes());
+                outputStream.write(NEW_LINE);
+                for (Map.Entry<String, String> header : response.headers().headers().entrySet()) {
+                    outputStream.write((header.getKey() + ": " + header.getValue()).getBytes());
+                    outputStream.write(NEW_LINE);
+                }
+                outputStream.write(NEW_LINE);
+                System.out.println(response.body().content());
+                if (response.body() != null) {
+                    outputStream.write(response.body().bytes());
+                }
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException ignore) {}
+        }
+        /*StringBuilder lines = new StringBuilder();
 
         try {
             String line;
@@ -74,11 +156,17 @@ public class ConnectionHandler implements Runnable {
                 if (httpRequest.method() == RequestMethod.POST) {
                     int length = Integer.parseInt(httpRequest.header("Content-Length"));
                     if (length > 0) {
-                        char[] charArray = new char[length];
-                        int read = bufferedReader.read(charArray, 0, length);
-                        if(read != -1) {
-                            httpRequest.postData(new String(charArray));
-                        }
+                        System.out.println("Length: " + length);
+                        byte[] bytes = new byte[length];
+
+                        System.out.println("1");
+                        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                        System.out.println("2");
+                        dataInputStream.read(bytes);
+                        System.out.println("3");
+                        dataInputStream.close();
+
+                        System.out.println("DATA: " + new String(bytes));
                     }
                 }
 
@@ -109,6 +197,6 @@ public class ConnectionHandler implements Runnable {
             try {
                 socket.close();
             } catch (IOException ignore) {}
-        }
+        }*/
     }
 }

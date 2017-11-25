@@ -19,6 +19,10 @@
 
 package de.jackwhite20.cobra.shared.http;
 
+import com.google.common.base.Charsets;
+
+import java.nio.charset.Charset;
+
 /**
  * Created by JackWhite20 on 17.02.2016.
  */
@@ -34,12 +38,32 @@ public class Body {
         this.bytes = body.getBytes();
     }
 
+    /**
+     * Returns the raw bytes as a byte array.
+     *
+     * @return The byte array.
+     */
     public byte[] bytes() {
         return bytes.clone();
     }
 
+    /**
+     * Returns the content of this body as a string with the given charset.
+     *
+     * @param charset The charset.
+     * @return The body as a string.
+     */
+    public String content(Charset charset) {
+        return new String(bytes, charset);
+    }
+
+    /**
+     * Returns the content of this body as a string with the utf8 charset.
+     *
+     * @return The body as a string.
+     */
     public String content() {
-        return new String(bytes);
+        return content(Charsets.UTF_8);
     }
 
     public static Builder form(String key, String value) {

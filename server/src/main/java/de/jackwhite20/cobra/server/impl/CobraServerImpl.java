@@ -224,7 +224,6 @@ public class CobraServerImpl implements CobraServer {
     public Response handleRequest(Request request) {
         for (Map.Entry<String, ResourceInfo> entry : resourceInfo.entrySet()) {
             if (request.location().startsWith(entry.getKey())) {
-
                 return entry.getValue().execute(request.location().replace(entry.getKey(), ""), request);
             }
         }
