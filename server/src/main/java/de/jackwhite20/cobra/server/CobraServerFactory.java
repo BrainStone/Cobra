@@ -19,6 +19,7 @@
 
 package de.jackwhite20.cobra.server;
 
+import com.google.common.base.Preconditions;
 import de.jackwhite20.cobra.server.impl.CobraConfig;
 import de.jackwhite20.cobra.server.impl.CobraServerImpl;
 
@@ -32,11 +33,7 @@ public final class CobraServerFactory {
     }
 
     public static CobraServer create(CobraConfig cobraConfig) {
-        if (cobraConfig == null) {
-            throw new IllegalArgumentException("cobraConfig cannot be null");
-        }
-
-        return new CobraServerImpl(cobraConfig);
+        return new CobraServerImpl(Preconditions.checkNotNull(cobraConfig, "cobraConfig"));
     }
 
     public static CobraServer create() {
