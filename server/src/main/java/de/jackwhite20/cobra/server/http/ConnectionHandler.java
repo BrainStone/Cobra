@@ -99,7 +99,10 @@ public class ConnectionHandler implements Runnable {
                         byte[] bytes = new byte[length];
                         httpReader.buffer().get(bytes);
 
+                        // Set body
                         httpRequest.body(bytes);
+                        // Set POST data from the body content
+                        httpRequest.postData(httpRequest.body().content());
                     }
                 }
 

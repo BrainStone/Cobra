@@ -42,9 +42,9 @@ public class Request {
 
     private Map<String, String> headers = new HashMap<>();
 
-    private Body body;
+    private Body body = Body.of("");
 
-    private Map<String, String> postForm;
+    private Map<String, String> postForm = new HashMap<>();
 
     public Request(String raw) {
         this.raw = raw;
@@ -89,9 +89,7 @@ public class Request {
         return headers.get(key);
     }
 
-    private void postData(String data) {
-        postForm = new HashMap<>();
-
+    void postData(String data) {
         String[] splitted = data.split("&");
         for (String aSplitted : splitted) {
             String[] keyVal = aSplitted.split("=");
@@ -112,10 +110,6 @@ public class Request {
      * @return The form value from the key.
      */
     public String postForm(String key) {
-        if (postForm == null) {
-            postData(body.content());
-        }
-
         return postForm.get(key);
     }
 
