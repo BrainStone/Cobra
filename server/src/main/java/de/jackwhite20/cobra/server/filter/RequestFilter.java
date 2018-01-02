@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 "JackWhite20"
+ * Copyright (c) 2018 "JackWhite20"
  *
  * This file is part of Cobra.
  *
