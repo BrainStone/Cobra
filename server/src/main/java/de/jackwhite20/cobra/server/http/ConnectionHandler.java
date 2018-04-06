@@ -94,8 +94,6 @@ public class ConnectionHandler implements Runnable {
                 if (httpRequest.method() == RequestMethod.POST) {
                     int length = Integer.parseInt(httpRequest.header("Content-Length"));
                     if (length > 0) {
-                        httpReader.buffer().position(httpReader.buffer().position() - 1);
-
                         byte[] bytes = new byte[length];
                         httpReader.buffer().get(bytes);
 
